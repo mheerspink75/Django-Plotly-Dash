@@ -1,0 +1,19 @@
+{% extends "base.html" %} 
+{% load plotly_dash %}
+
+
+{% block content %}
+
+{% block navbar %}
+{% include './components/navbar.html' %}
+{% endblock navbar %}
+
+{% block datatable %}
+
+<div class="container">
+    {% plotly_direct name="dashtable" %}
+</div>
+
+{% endblock datatable %}
+
+{% endblock %}
