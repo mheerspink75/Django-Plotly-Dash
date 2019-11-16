@@ -55,8 +55,9 @@ def update_value(input_data):
                   xaxis_range=[start, end],
                   height=700)
 
+    OHLC_chart = dcc.Graph(figure=(fig))
         
 
-    return html.Div([dcc.Graph(figure=(fig)), OHLC_table])
+    return html.Div([OHLC_chart, OHLC_table])
 
      
