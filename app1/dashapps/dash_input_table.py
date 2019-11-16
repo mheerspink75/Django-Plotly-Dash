@@ -55,11 +55,16 @@ def update_value(input_data):
         INTRADAY_TIME_SERIES = pd.read_csv(INTRADAY_OHLC).head(1)
         return INTRADAY_TIME_SERIES
 
-    OHLC_INTRADAY_QUOTE = get_intraday_time_series(input_data)
-    #print(OHLC_INTRADAY_QUOTE.tail())
+
+
 
     QUOTE_SEARCH = web.get_quote_av(input_data, api_key=(API_KEY)).reset_index()
     #print(QUOTE_SEARCH.tail())
+
+    OHLC_INTRADAY_QUOTE = get_intraday_time_series(input_data)
+    #print(OHLC_INTRADAY_QUOTE.tail())
+
+
 
 
     QUOTE_table =  dash_table.DataTable(
