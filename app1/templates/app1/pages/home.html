@@ -8,12 +8,10 @@
 {% include './components/navbar.html' %}
 {% endblock navbar %}
 
-{% block datatable %}
-
 <div class="container">
+{% block dashtable %}
 {% plotly_direct name="dashtable" %}
+{% endblock dashtable %}
 </div>
-
-{% endblock datatable %}
 
 {% endblock %}

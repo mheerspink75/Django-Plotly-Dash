@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from app1.dashapps import dashtable
+from app1.dashapps import dash_input_table
 
 # Create your views here.
 
