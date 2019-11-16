@@ -8,6 +8,7 @@ import pandas as pd
 import pandas_datareader.data as web
 from django_plotly_dash import DjangoDash
 
+
 API_KEY = 'ALPHAVANTAGE_API_KEY'
 
 symbol = 'BTC'
