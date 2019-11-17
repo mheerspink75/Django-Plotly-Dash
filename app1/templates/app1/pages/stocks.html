@@ -7,10 +7,8 @@
     {% include './components/navbar.html' %}
 {% endblock navbar %}
 
-<div class="container about border">
-    {% block dashinputtable %}
-        {% plotly_direct name="stock-chart" %}
-    {% endblock dashinputtable %}
-</div>
+{% block dashinputtable %}
+    {% plotly_direct name="stock-chart" %}
+{% endblock dashinputtable %}
 
 {% endblock %}
