@@ -7,8 +7,14 @@
     {% include './components/navbar.html' %}
 {% endblock navbar %}
 
+{% block sidebar%}
+    {% include './components/sidebar.html' %}
+{% endblock sidebar%}
+
 <div class="container">
-    <h1 class="">Home Page</h1>
+    {% block crypto_quote %}
+        {% plotly_direct name='crypto-quotes' %}
+    {% endblock crypto_quote%}
 </div>
 
 {% endblock %}
