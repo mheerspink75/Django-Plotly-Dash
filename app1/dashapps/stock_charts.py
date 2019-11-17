@@ -36,6 +36,8 @@ app.layout = html.Div(children=[
     Output(component_id='output-graph', component_property='children'),
     [Input(component_id='input', component_property='value')]
 )
+
+
 def update_value(input_data):
     ##### YAHOO FINANCE #####
     df = data.DataReader(input_data, 'yahoo')
@@ -83,17 +85,21 @@ def update_value(input_data):
                                         decreasing_line_color='gray')]))
 
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df.index, y=df.Open, name=(input_data.upper() + " Open"),
-                             line_color='lightskyblue'))
+    fig.add_trace(go.Scatter(x=df.index, y=df.Open, 
+                            name=(input_data.upper() + " Open"),
+                            line_color='lightskyblue'))
 
-    fig.add_trace(go.Scatter(x=df.index, y=df.High, name=(input_data.upper() + " High"),
+    fig.add_trace(go.Scatter(x=df.index, y=df.High, 
+                             name=(input_data.upper() + " High"),
                              line_color='lightsteelblue'))
 
-    fig.add_trace(go.Scatter(x=df.index, y=df.Low, name=(input_data.upper() + " Low"),
+    fig.add_trace(go.Scatter(x=df.index, y=df.Low, 
+                             name=(input_data.upper() + " Low"),
                              line_color='lightgray'))
 
-    fig.add_trace(go.Scatter(x=df.index, y=df.Close, name=(input_data.upper() + " Close"),
-                             line_color='skyblue'))
+    fig.add_trace(go.Scatter(x=df.index, y=df.Close, 
+                            name=(input_data.upper() + " Close"),
+                            line_color='skyblue'))
 
     fig.update_layout(title=input_data.upper(),
                       font_size=15,
