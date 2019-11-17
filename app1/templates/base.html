@@ -8,6 +8,7 @@
     <title>Hello Django</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
     {% plotly_header %}
     <!-- Bootstrap CSS-->
     <link
@@ -24,6 +25,7 @@
     <div class="container-fluid">
       {% block content %} {% endblock %}
     </div>
+
     {% plotly_footer %}
     <!-- Bootstrap JS -->
     <script
@@ -41,5 +43,6 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+
   </body>
 </html>

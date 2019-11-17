@@ -21,7 +21,7 @@ def get_forex():
 df = get_forex()
 
 
-app = DjangoDash('dashtable')
+app = DjangoDash('crypto-table')
 
 app.layout = dash_table.DataTable(
     id='table',

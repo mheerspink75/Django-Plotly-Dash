@@ -1,15 +1,14 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 {% load plotly_dash %}
+
 {% block content %}
 
 {% block navbar %}
-{% include './components/navbar.html' %}
+    {% include './components/navbar.html' %}
 {% endblock navbar %}
 
-   <div class="container about border">
-    {% block dashinputtable %}
-    {% plotly_direct name="dashinputtable" %}
-    {% endblock dashinputtable %}
-   </div>
+<div class="container">
+    <h1 class="">About Page</h1>
+</div>
 
 {% endblock %}

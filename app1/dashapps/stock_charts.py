@@ -20,7 +20,7 @@ start = datetime.datetime(2017, 1, 1)
 end = datetime.datetime.now()
 
 
-app = DjangoDash('dashinputtable')
+app = DjangoDash('stock-chart')
 
 
 app.layout = html.Div(children=[
