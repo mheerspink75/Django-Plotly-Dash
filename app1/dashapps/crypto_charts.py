@@ -31,8 +31,6 @@ app.layout = html.Div(children=[
 )
 
 
-
-
 def update_value(input_data):
     df = web.DataReader([(input_data + "/USD"),
                     ("USD/" + input_data)],
