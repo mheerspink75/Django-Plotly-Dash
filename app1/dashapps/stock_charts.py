@@ -27,7 +27,7 @@ app.layout = html.Div(children=[
     html.Div(children='''
         Symbol to graph:
     '''),
-    html.Div(dcc.Input(id='input', value='AAPL', type='text', debounce=True)),
+    html.Div(dcc.Input(id='input', value='MSFT', type='text', debounce=True)),
     html.Div(id='output-graph'),
 ])
 
@@ -41,14 +41,14 @@ app.layout = html.Div(children=[
 def update_value(input_data):
     ##### YAHOO FINANCE #####
     df = data.DataReader(input_data, 'yahoo')
-    # print(df.tail(1))
+    print(df.tail(1))
 
     ###### ALPHAVANTAGE TIME_SERIES_INTRADAY ######
     def get_intraday_time_series(input_data):
         intraday = 'TIME_SERIES_INTRADAY'
         # ['1min', '5min', '15min', '30min', '60min']
         intraday_interval = '1min'
-        #print('Currently pulling: ', input_data, intraday, intraday_interval)
+        print('Currently pulling: ', input_data, intraday, intraday_interval)
 
         INTRADAY_OHLC = ('https://www.alphavantage.co/query?') + ('function=' + intraday) + \
             ('&symbol=' + input_data) + ('&interval=' + intraday_interval) + \
@@ -59,10 +59,10 @@ def update_value(input_data):
 
     QUOTE_SEARCH = web.get_quote_av(
         input_data, api_key=(API_KEY)).reset_index()
-    # print(QUOTE_SEARCH.tail())
+    print(QUOTE_SEARCH.tail(1))
 
     OHLC_INTRADAY_QUOTE = get_intraday_time_series(input_data)
-    # print(OHLC_INTRADAY_QUOTE.tail())
+    print(OHLC_INTRADAY_QUOTE.tail(1))
 
     QUOTE_table = dash_table.DataTable(
         id='Quote_table',

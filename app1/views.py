@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from app1.dashapps import crypto_charts
-from app1.dashapps import stock_charts
+from app1.dashapps import stock_charts2
 from app1.dashapps import crypto_quotes
 
 

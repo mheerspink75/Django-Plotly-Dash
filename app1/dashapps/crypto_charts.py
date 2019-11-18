@@ -1,6 +1,6 @@
 import pandas as pd
 import pandas_datareader.data as web
-#from pandas_datareader import data
+from pandas_datareader import data
 import datetime
 import dash
 import dash_table
@@ -13,13 +13,7 @@ from django_plotly_dash import DjangoDash
 
 API_KEY = 'ALPHAVANTAGE_API_KEY'
 
-#symbol = 'BTC'
-#market = 'USD'
-
-datatype = 'csv'  # ['json', 'csv']
-
-
-app = DjangoDash('crypto-table')
+app = DjangoDash('crypto-charts')
 
 
 app.layout = html.Div(children=[
@@ -53,15 +47,13 @@ def update_value(input_data):
     ##### DIGITAL_CURRENCY_DAILY #####
     def get_daily_crypto(input_data):
         daily = 'DIGITAL_CURRENCY_DAILY'
-        #print('Currently pulling: ', input_data, daily)
+        print('Currently pulling: ', input_data, daily)
 
-        CRYPTO_DAILY_OHLC = ('https://www.alphavantage.co/query?') + ('function=' + daily) + \
-            ('&symbol=' + input_data) + ('&market=' + 'USD') + \
-            ('&apikey=' + API_KEY) + ('&datatype=' + datatype)
+        CRYPTO_DAILY_OHLC = 'https://www.alphavantage.co/query?function=' + daily + '&symbol=' + input_data + '&market=USD&apikey=' + API_KEY + '&datatype=csv'
 
         CRYPTO_DAILY_TIME_SERIES = pd.read_csv(CRYPTO_DAILY_OHLC)
         return CRYPTO_DAILY_TIME_SERIES
-    #print(get_daily_crypto(input_data))
+    print(get_daily_crypto(input_data))
 
 
     def get_crypto_daily_OHLC_chart():

@@ -59,7 +59,7 @@ def get_crypto_daily_OHLC_chart():
                 xaxis_range=['2019-01-01', datetime.datetime.now()],)
     return fig
 
-app.layout = dcc.Graph(figure=(get_crypto_daily_OHLC_chart()))
+app.layout = dcc.Graph(figure=(get_crypto_daily_line_chart()))
 
 
 if __name__ == '__main__':
