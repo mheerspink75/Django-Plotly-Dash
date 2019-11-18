@@ -16,8 +16,6 @@ API_KEY = 'ALPHAVANTAGE_API_KEY'
 app = DjangoDash('crypto-table')
 
 
-
-
 app.layout = html.Div(children=[
     html.Div(children='''
         Symbol to graph:
