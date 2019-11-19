@@ -41,6 +41,7 @@ def update_output_div(input_value):
     table = dash_table.DataTable(id='table', columns=[{"name": i, "id": i} for i in dff.columns], data=dff.to_dict('records'))
 
     fig = go.Figure()
+    
     fig.add_trace(go.Scatter(x=df.index, y=df.Open, 
                             name=(input_value.upper() + " Open"),
                             line_color='lightskyblue'))
@@ -76,4 +77,5 @@ def update_output_div(input_value):
                                     increasing_line_color='cyan',
                                     decreasing_line_color='gray')]))
 
-    return html.Div(children=[html.Div(table), html.Div(OHLC_chart), html.Div(table), html.Div(OHLC_candlestick), html.Div(table)])
+    return html.Div(children=[html.Div(table), html.Div(OHLC_chart), 
+                    html.Div(table), html.Div(OHLC_candlestick), html.Div(table)])

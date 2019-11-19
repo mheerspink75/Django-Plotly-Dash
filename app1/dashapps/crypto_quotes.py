@@ -69,7 +69,6 @@ drop_down = dcc.Dropdown(
     value='MTL'
 )
 
-#x = pd.read_json('https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=BTC&to_currency=USD&apikey=' + 'APIKEY').reset_index()
 y = web.DataReader(["USD/BTC", "BTC/USD"], "av-forex",
                    api_key=API_KEY).reset_index()
 
@@ -80,5 +79,5 @@ quote = dash_table.DataTable(
 )
 
 
-app.layout = html.Div(children=[html.Div(drop_down), html.Div(
-    table), html.Div(chart), html.Div(quote)])
+app.layout = html.Div(children=[html.Div(drop_down), 
+    html.Div(table), html.Div(chart), html.Div(quote)])
