@@ -11,3 +11,6 @@ https://www.youtube.com/playlist?list=PLsyeobzWxl7r2ukVgTqIQcl-1T0C2mzau
 https://docs.djangoproject.com/en/2.2/topics/db/models/#
 
 
+heroku git:remote -a django-machtrade
+
+
