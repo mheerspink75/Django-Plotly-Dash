@@ -1,2 +1,0 @@
-def ALPHAVANTAGE_API_KEY():
-    return 'K6QCETUG7BJZW11N'
