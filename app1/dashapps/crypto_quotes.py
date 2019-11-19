@@ -20,7 +20,6 @@ datatype = 'csv'  # ['json', 'csv']
 
 ##### DIGITAL_CURRENCY_DAILY #####
 
-
 def get_daily_crypto(symbol):
     daily = 'DIGITAL_CURRENCY_DAILY'
     #print('Currently pulling: ', symbol, daily)

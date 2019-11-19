@@ -11,4 +11,5 @@ datatype = 'csv'  # ['json', 'csv']
 SMA = 'https://www.alphavantage.co/query?' + 'function=SMA' + '&symbol=' + \
     (symbol + market) + '&interval=weekly' + '&time_period=10' + \
     '&series_type=open' + '&apikey=' + (API_KEY)
+    
 print(pd.read_json(SMA))
