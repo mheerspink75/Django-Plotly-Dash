@@ -131,4 +131,5 @@ dmypy.json
 
 .vscode/*
 API_KEYS.py
+superuser.txt
 dpd_env/*

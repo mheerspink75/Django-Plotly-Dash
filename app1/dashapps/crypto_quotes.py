@@ -19,6 +19,8 @@ market = 'USD'
 datatype = 'csv'  # ['json', 'csv']
 
 ##### DIGITAL_CURRENCY_DAILY #####
+
+
 def get_daily_crypto(symbol):
     daily = 'DIGITAL_CURRENCY_DAILY'
     #print('Currently pulling: ', symbol, daily)
@@ -30,20 +32,21 @@ def get_daily_crypto(symbol):
     CRYPTO_DAILY_TIME_SERIES = pd.read_csv(CRYPTO_DAILY_OHLC)
     return CRYPTO_DAILY_TIME_SERIES
 
+
 def get_crypto_daily_line_chart():
     df = get_daily_crypto(symbol)
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df.timestamp, y=df['high (USD)'], name="BTC High (USD)",
-                            line_color='deepskyblue'))
+                             line_color='deepskyblue'))
 
     fig.add_trace(go.Scatter(x=df.timestamp, y=df['low (USD)'], name="BTC Low (USD)",
-                            line_color='dimgray'))
+                             line_color='dimgray'))
 
     fig.update_layout(title_text='Time series - BTC (USD)',
-                    xaxis_rangeslider_visible=True,
-                    xaxis_title='Date',
-                    yaxis_title='Price (USD)',
-                    xaxis_range=['2018-01-01', datetime.datetime.now()],)
+                      xaxis_rangeslider_visible=True,
+                      xaxis_title='Date',
+                      yaxis_title='Price (USD)',
+                      xaxis_range=['2018-01-01', datetime.datetime.now()],)
     return fig
 
 
@@ -64,10 +67,11 @@ drop_down = dcc.Dropdown(
         {'label': 'Litecoin', 'value': 'LTC'}
     ],
     value='MTL'
-)  
+)
 
 #x = pd.read_json('https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=BTC&to_currency=USD&apikey=' + 'APIKEY').reset_index()
-y = web.DataReader(["USD/BTC", "BTC/USD"], "av-forex", api_key=API_KEY).reset_index()
+y = web.DataReader(["USD/BTC", "BTC/USD"], "av-forex",
+                   api_key=API_KEY).reset_index()
 
 quote = dash_table.DataTable(
     id='table',
@@ -76,8 +80,5 @@ quote = dash_table.DataTable(
 )
 
 
-
-
-app.layout = html.Div(children=[html.Div(drop_down), html.Div(table), html.Div(chart), html.Div(quote)])
-
-
+app.layout = html.Div(children=[html.Div(drop_down), html.Div(
+    table), html.Div(chart), html.Div(quote)])

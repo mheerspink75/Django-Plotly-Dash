@@ -6,11 +6,11 @@
 {% block navbar %}
     {% include './components/navbar.html' %}
 {% endblock navbar %}
+
 <div class="container">
 {% block cryptotable %}
     {% plotly_direct name="crypto-quotes" %}
 {% endblock cryptotable %}
-
 </div>
 
 

@@ -12,9 +12,9 @@ def get_forex():
 
 def get_input_data():
     return web.DataReader(["USD/" + input_data, input_data + "/USD"], "av-forex", api_key=API_KEY).reset_index()
-print(get_input_data())
+#print(get_input_data())
 
 #### REALTIME #################################################################################################################################
-x = pd.read_json('https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=BTC&to_currency=USD&apikey=' + 'APIKEY')
-y = pd.read_json('https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=BTC&apikey=' + 'APIKEY')
-#print(x)
+# x = pd.read_json('https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=BTC&to_currency=USD&apikey=' + 'APIKEY')
+# y = pd.read_json('https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=USD&to_currency=BTC&apikey=' + 'APIKEY')
+# print(x)
