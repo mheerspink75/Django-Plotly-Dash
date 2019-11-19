@@ -13,4 +13,6 @@ https://docs.djangoproject.com/en/2.2/topics/db/models/#
 
 heroku git:remote -a django-machtrade
 
+heroku: https://django-machtrade.herokuapp.com/
+
 
