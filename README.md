@@ -17,4 +17,25 @@ heroku: https://django-machtrade.herokuapp.com/
 
 https://ultimatedjango.com/learn-django/lessons/push-to-heroku/
 
+---
+```
+source dpd_env/scripts/activate
+
+py manage.py help
+
+py manage.py runserver
+```
+https://www.youtube.com/watch?v=6Q5OVCKufBU&list=PLsyeobzWxl7r2ukVgTqIQcl-1T0C2mzau&index=22
+
+py manage.py startapp accounts
+```
+### Add user login
+
+add accounts to intstalled apps
+
+add urls.py to accounts/
+
+add path include urlpatterns, accounts.urls to django_app1/urs.py
+
+add render request accounts/view.py
 
