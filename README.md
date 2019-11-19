@@ -15,4 +15,6 @@ heroku git:remote -a django-machtrade
 
 heroku: https://django-machtrade.herokuapp.com/
 
+https://ultimatedjango.com/learn-django/lessons/push-to-heroku/
+
 
