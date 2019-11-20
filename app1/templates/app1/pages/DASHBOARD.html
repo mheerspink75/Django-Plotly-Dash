@@ -2,18 +2,23 @@
 {% load plotly_dash %}
 
 {% block content %}
+{% if user.is_authenticated %}
+
 
 {% block navbar %}
     {% include './components/DASHBOARD_navbar.html' %}
 {% endblock navbar %}
 
+
 {% block sidebar%}
     {% include './components/sidebar.html' %}
 {% endblock sidebar%}
 
+{% else %}
 <div class="container">
-    {% block crypto_quote %}
-    {% endblock crypto_quote%}
+    {% block login_message %}
+    <p class="">Please <a href="{% url 'login' %}" class="">Login </a>to view this content</p>
+    {% endblock login_message %}
 </div>
-
+{% endif %}
 {% endblock %}
