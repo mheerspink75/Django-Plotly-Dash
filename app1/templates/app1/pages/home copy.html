@@ -1,0 +1,19 @@
+{% extends "base.html" %} 
+{% load plotly_dash %}
+
+{% block content %}
+
+{% block navbar %}
+    {% include './components/navbar.html' %}
+{% endblock navbar %}
+
+{% block sidebar%}
+    {% include './components/sidebar.html' %}
+{% endblock sidebar%}
+
+<div class="container">
+    {% block crypto_quote %}
+    {% endblock crypto_quote%}
+</div>
+
+{% endblock %}
