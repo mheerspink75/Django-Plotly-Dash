@@ -1,19 +1,13 @@
 {% extends "base.html" %} 
 {% load plotly_dash %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-
 {% block navbar %}
     {% include './components/navbar.html' %}
 {% endblock navbar %}
-
-{% block sidebar%}
-    {% include './components/sidebar.html' %}
-{% endblock sidebar%}
-
 <div class="container">
-    {% block crypto_quote %}
-    {% endblock crypto_quote%}
+    <p class="">Login to access the dashboard</p>
 </div>
 
 {% endblock %}

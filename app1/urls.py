@@ -7,6 +7,7 @@ from app1 import views
 
 urlpatterns = [
   path('', views.home, name='home'),
+  path('DASHBOARD/', views.DASHBOARD, name='dashboard'),
   path('crypto/', views.crypto, name='crypto'),
   path('stocks/', views.stocks, name='stocks'),
   path('about/', views.about, name='about'),

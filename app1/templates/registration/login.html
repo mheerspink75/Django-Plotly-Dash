@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+{% block navbar %}
+    {% include './components/navbar.html' %}
+{% endblock navbar %}
+
+{% block loginform %}
+<div class="container">
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button type="submit" class="btn btn-success">Login</button>
+        <a href="{% url 'register' %}">Register</a>
+    </form>
+</div>
+{% endblock loginform %}
+
+{% endblock %}
