@@ -133,4 +133,4 @@ dmypy.json
 app1/dashapps/API_KEYS.py
 superuser.txt
 dpd_env/*
-#KEY_GEN.py
+staticfiles/
