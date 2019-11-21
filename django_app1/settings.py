@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'b8svl9#t37gc)_tve!%+!=-g)zg^tdso$us=9p##g#pm!*a^m5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['django-machtrade.herokuapp.com', '127.0.0.1']
 
