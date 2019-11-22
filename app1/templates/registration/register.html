@@ -6,15 +6,25 @@
     {% include './components/navbar.html' %}
 {% endblock navbar %}
 
+{% block login_message %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container" style="text-align: center;">
+        <h1 class="display-1">MACH TRADE</h1>
+        <p class="lead">Please <a href="{% url 'login' %}">Login</a> to access the dashboard  |  Forgot <a href="{% url 'password_reset' %}">password</a></p>
+    </div>
+</div>
+{% endblock login_message %}
+
 {% block registerform %}
-    <div class="container">
-        <form method="POST" class="form-group">
+    <div class="row justify-content-center">
+        <form method="POST" class="form-group col-4">
                 {% csrf_token %}
                     {{ form|crispy }}
-            <button type="submit" class="btn btn-success">Register</button>
+            <button type="submit" class="btn btn-outline-dark">Register</button>
         </form>
     </div>
 {% endblock registerform %}
+
 
 {% endblock %}
 

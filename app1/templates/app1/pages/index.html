@@ -1,16 +1,18 @@
 {% extends "base.html" %} 
-{% load plotly_dash %}
 {% load crispy_forms_tags %}
 
 {% block content %}
 
 {% block navbar %}
-    {% include './components/navbar.html' %}
+    {% include './components/index_navbar.html' %}
 {% endblock navbar %}
 
 {% block login_message %}
-<div class="container">
-    <p>Login to access the dashboard</p>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container" style="text-align: center;">
+        <h1 class="display-1">MACH TRADE</h1>
+        <p class="lead">Please <a href="{% url 'login' %}">Login</a> to access the dashboard  |  Forgot <a href="{% url 'password_reset' %}">password</a></p>
+    </div>
 </div>
 {% endblock login_message %}
 
