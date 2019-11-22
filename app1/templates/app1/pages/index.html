@@ -3,11 +3,15 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+
 {% block navbar %}
     {% include './components/navbar.html' %}
 {% endblock navbar %}
+
+{% block login_message %}
 <div class="container">
-    <p class="">Login to access the dashboard</p>
+    <p>Login to access the dashboard</p>
 </div>
+{% endblock login_message %}
 
 {% endblock %}

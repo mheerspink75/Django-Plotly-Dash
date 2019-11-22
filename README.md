@@ -25,3 +25,5 @@ https://www.youtube.com/watch?v=Ev5xgwndmfc
 
 https://www.youtube.com/watch?v=z4lfVsb_7MA&t=420s
 
+https://pythonprogramming.net/user-login-logout-django-tutorial/
+
