@@ -7,9 +7,11 @@ import dash_table.FormatTemplate as FormatTemplate
 from dash_table.Format import Sign
 import pandas as pd
 from collections import OrderedDict
+from django_plotly_dash import DjangoDash
 
 
-app = dash.Dash(__name__)
+app = DjangoDash('ATM')
+
 
 date = datetime.datetime.now()
 
@@ -138,6 +140,3 @@ def update_output(n_clicks, value):
         n_clicks
     )
 
-
-if __name__ == '__main__':
-    app.run_server(debug=True)

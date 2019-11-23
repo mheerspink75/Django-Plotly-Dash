@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms.forms import RegisterForm
 from app1.dashapps import stock_charts2
 from app1.dashapps import crypto_quotes
+from app1.dashapps import ATM
 
 
 def home(request):

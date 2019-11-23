@@ -11,7 +11,6 @@ import plotly.graph_objects as go
 from django_plotly_dash import DjangoDash
 
 
-
 app = DjangoDash('stock-chart')
 
 
@@ -31,51 +30,34 @@ app.layout = html.Div(children=[
     [Input(component_id='my-id', component_property='value')]
 )
 
+
 def update_output_div(input_value):
     x = input_value.upper()
     df = data.DataReader(x, 'yahoo')
-    dff = df.tail(1).reset_index()
-    dfff = data.DataReader(x, 'yahoo', start='2019-10-1', end=datetime.datetime.now())
+    table_df = df.tail(1).reset_index()
 
-
-    table = dash_table.DataTable(id='table', columns=[{"name": i, "id": i} for i in dff.columns], data=dff.to_dict('records'))
+    table = dash_table.DataTable(id='table', columns=[
+                                 {"name": i, "id": i} for i in table_df.columns], 
+                                 data=table_df.to_dict('records'))
 
     fig = go.Figure()
-    
-    fig.add_trace(go.Scatter(x=df.index, y=df.Open, 
-                            name=(input_value.upper() + " Open"),
-                            line_color='lightskyblue'))
 
-    fig.add_trace(go.Scatter(x=df.index, y=df.High, 
+
+    fig.add_trace(go.Scatter(x=df.index, y=df.High,
                              name=(input_value.upper() + " High"),
-                             line_color='lightsteelblue'))
+                             line_color='deepskyblue'))
 
-    fig.add_trace(go.Scatter(x=df.index, y=df.Low, 
+    fig.add_trace(go.Scatter(x=df.index, y=df.Low,
                              name=(input_value.upper() + " Low"),
-                             line_color='lightgray'))
-
-    fig.add_trace(go.Scatter(x=df.index, y=df.Close, 
-                            name=(input_value.upper() + " Close"),
-                            line_color='skyblue'))
+                             line_color='dimgray'))
 
     fig.update_layout(title=input_value.upper(),
                       font_size=15,
                       xaxis_rangeslider_visible=True,
                       yaxis_title='Price (USD)',
                       xaxis_range=[start, end],
-                      height=700)
+                      height=600)
 
     OHLC_chart = dcc.Graph(figure=(fig))
 
-    OHLC_candlestick = dcc.Graph(figure=go.Figure(
-                                data=[go.Candlestick(
-                                    x=dfff.index,
-                                    open=dfff['Open'],
-                                    high=dfff['High'],
-                                    low=dfff['Low'],
-                                    close=dfff['Close'],
-                                    increasing_line_color='cyan',
-                                    decreasing_line_color='gray')]))
-
-    return html.Div(children=[html.Div(table), html.Div(OHLC_chart), 
-                    html.Div(table), html.Div(OHLC_candlestick), html.Div(table)])
+    return html.Div(children=[html.Div(table), html.Div(OHLC_chart)])

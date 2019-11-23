@@ -25,7 +25,7 @@ SECRET_KEY = 'o!0m2ky=6e)k=ljt7a3n-(@a!a#bs=4yqfeu=feud@s_6fp**k'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['django-machtrade.herokuapp.com', '127.0.0.1']
 
