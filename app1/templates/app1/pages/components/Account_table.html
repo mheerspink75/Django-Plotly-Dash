@@ -1,0 +1,87 @@
+{% block account_table %}
+
+<div class="container">
+  <table class="table table-bordered table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Account Balance</th>
+        <th scope="col">Username</th>
+        <th scope="col">Date</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr>
+        <td class="font-weight-bold">
+          <h5>${{user.account.account_balance}}</h5>
+        </td>
+        <td>{{user.username}}</td>
+        <td>{{user.account.account_date}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <label class="input-group-text" for="inputGroupSelect01"
+        >Transactions
+      </label>
+    </div>
+    <select class="custom-select" id="inputGroupSelect01">
+      <option selected>Choose...</option>
+      <option value="1">Deposit</option>
+      <option value="2">Withdrawl</option>
+      <option value="3">Transfer</option>
+    </select>
+    <div class="w-100"></div>
+
+    <div class="input-group-prepend">
+      <span class="input-group-text">Amount</span>
+      <span class="input-group-text">$</span>
+    </div>
+
+    <input
+      type="text"
+      class="form-control"
+      aria-label="Dollar amount (with dot and two decimal places)"
+    />
+    <div class="input-group-append">
+      <button class="btn btn-outline-success" type="button" id="button-addon2">
+        Submit
+      </button>
+    </div>
+  </div>
+
+  <table class="table table-bordered table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Cash Balance</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr>
+        <td class="font-weight-bold">
+          <h3>${{user.account.cash_balance}}</h3>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table table-bordered table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Transactions</th>
+        <th scope="col">Type</th>
+        <th scope="col">Amount</th>
+      </tr>
+    </thead>
+    <tbody class="text-right">
+      <tr>
+        <td>{{user.account.transaction_date}}</td>
+        <td>{{user.account.transaction_type}}</td>
+        <td class="text-center">$ {{user.account.transaction_amount}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

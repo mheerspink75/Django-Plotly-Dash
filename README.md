@@ -53,12 +53,10 @@ py manage.py shell
 >>> User._meta.get_fields()
 # Also include hidden fields.
 >>> User._meta.get_fields(include_hidden=True)
-
+```
 >>> print(User._meta.get_fields())
 (<ManyToOneRel: admin.logentry>, <django.db.models.fields.AutoField: id>, <django.db.models.fields.CharField: password>, <django.db.models.fields.DateTimeField: last_login>, <django.db.models.fields.BooleanField: is_superuser>, <django.db.models.fields.CharField: username>, <django.db.models.fields.CharField: first_name>, <django.db.models.fields.CharField: last_name>, <django.db.models.fields.EmailField: email>, <django.db.models.fields.BooleanField: is_staff>, <django.db.models.fields.BooleanField: is_active>, <django.db.models.fields.DateTimeField: date_joined>, <django.db.models.fields.related.ManyToManyField: groups>, <django.db.models.fields.related.ManyToManyField: user_permissions>)
 
-
-```
 And to store numbers up to approximately one billion with a resolution of 10 decimal places:
 
 models.DecimalField(..., max_digits=19, decimal_places=10)
@@ -78,3 +76,33 @@ The default form widget for this field is a single TextInput. The admin uses two
 >>> User._meta.get_field('account')
 
 {{ user.account.account_balance }}
+
+### Python to db
+```
+py manage.py shell
+
+from django.contrib.auth.models import User
+from django.db import models
+from app1.models import Account
+
+User.objects.all()
+<QuerySet [<User: mattheerspink>, <User: mh1975>, <User: user5000>]>
+
+Account.objects.all()
+<QuerySet [<Account: Account object (1)>, <Account: Account object (2)>, <Account: Account object (3)>]>
+
+Account1 = Account.objects.first()
+Account1_user = Account1.user
+
+>>> Account1
+<Account: Account object (1)>
+
+>>> Account1_user
+<User: mh1975>
+
+>>> Account1_user.username
+'mh1975'
+
+Account.objects.first().user.username
+
+```

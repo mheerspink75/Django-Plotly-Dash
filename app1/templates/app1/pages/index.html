@@ -6,14 +6,18 @@
 {% block navbar %}
     {% include './components/index_navbar.html' %}
 {% endblock navbar %}
-
 {% block login_message %}
 <div class="jumbotron jumbotron-fluid">
-    <div class="container" style="text-align: center;">
-        <h1 class="display-1">MACH TRADE</h1>
+    <div class="text-center">
+        <h1 class="display-2">MACH TRADE</h1>
         <p class="lead">Please <a href="{% url 'login' %}">Login</a> to access the dashboard  |  Forgot <a href="{% url 'password_reset' %}">password</a></p>
     </div>
 </div>
 {% endblock login_message %}
 
+<div class="container">
+    <div class="row justify-content-center">
+        <img src="https://media.giphy.com/media/ORUfxy9ElFbPIi2K1K/giphy.gif" style="width: 15rem; height: auto;">
+    </div>
+</div>
 {% endblock %}
