@@ -9,30 +9,40 @@
 {% include './components/DASHBOARD_navbar.html' %} 
 {% endblock navbar %} 
 
-
-{% block profile %}
-<div class="col-sm-3">
-  <div class="home">
-    <div class="card">
-      <div class="card-header">Profile</div>
-        <div class="card-body b4">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Username:   {{user.username}}</li>
-                <li class="list-group-item">Email:      {{user.email}}</li>
-                <li class="list-group-item">First Name: {{user.first_name}}</li>
-                <li class="list-group-item">Last Name:  {{user.last_name}}</li>
-                <li class="list-group-item">Joined:     {{user.date_joined}}</li>
-                <li class="list-group-item">Last Login: {{user.last_login}}</li>
-                <li class="list-group-item">ID: {{user.id}} </li>
-            </ul>
-            <div class="card-footer" style="text-align: right;">
-                <a href="#" class="card-link">Update Profile</a>
-                <a href="{% url 'password_change' %}" class="card-link">Change Password</a>
+{% block account %}
+<div class="row">
+    <div class="col-6 col-sm-3">
+    <div class="home">
+        <div class="card">
+        <div class="card-header">Profile</div>
+            <div class="card-body b4">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Username:   {{user.username}}</li>
+                    <li class="list-group-item">Email:      {{user.email}}</li>
+                    <li class="list-group-item">First Name: {{user.first_name}}</li>
+                    <li class="list-group-item">Last Name:  {{user.last_name}}</li>
+                    <li class="list-group-item">Joined:     {{user.date_joined}}</li>
+                    <li class="list-group-item">Last Login: {{user.last_login}}</li>
+                    <li class="list-group-item">Account Date: {{ user.account.account_date }} </li>
+                    <li class="list-group-item">Account Balance: ${{ user.account.account_balance }} </li>
+                    <li class="list-group-item">Cash Balance: ${{ user.account.cash_balance }} </li>
+                </ul>
+                <div class="card-footer" style="text-align: right;">
+                    <a href="#" class="card-link">Update Profile</a>
+                    <a href="{% url 'password_change' %}" class="card-link">Change Password</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock profile %}
+{% endblock account %}
+
+{% block ATM %}
+    <div class="col-6 col-sm-8">
+    {% plotly_direct name='ATM' %}
+    </div>
+{% endblock ATM %}
+
 
 {% else %} 
 
