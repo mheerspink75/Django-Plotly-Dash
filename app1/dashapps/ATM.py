@@ -9,6 +9,11 @@ import pandas as pd
 from collections import OrderedDict
 from django_plotly_dash import DjangoDash
 
+from django.contrib.auth.models import User
+from django.db import models
+from app1.models import Account
+
+
 
 app = DjangoDash('ATM')
 
@@ -16,9 +21,9 @@ app = DjangoDash('ATM')
 date = datetime.datetime.now()
 
 account_balance = pd.DataFrame(OrderedDict([
-    ('date', [date]),
-    ('amount', [1092000]),
-    ('change', [0.143]),
+    ('date', [Account.objects.get(pk=3).account_date]),
+    ('amount', [Account.objects.get(pk=3).account_balance]),
+    ('Username', [Account.objects.get(pk=3).user.username]),
 ]))
 
 
@@ -29,12 +34,11 @@ account_balance_table = html.Div(
         columns=[{
             'id': 'date',
             'name': 'Date',
-                    'type': 'text'
+            'type': 'text'
         }, {
-            'id': 'change',
-            'name': 'Change (%)',
-            'type': 'numeric',
-            'format': FormatTemplate.percentage(1).sign(Sign.positive)
+            'id': 'Username',
+            'name': 'Username',
+            'type': 'text',
         }, {
             'id': 'amount',
             'name': 'Account Balance ($)',
@@ -47,8 +51,8 @@ account_balance_table = html.Div(
 
 
 cash_balance = pd.DataFrame(OrderedDict([
-    ('amount', [1092000]),
-    ('change', [0.143]),
+    ('amount', [Account.objects.get(pk=3).cash_balance]),
+   # ('change', [0]),
 ]))
 
 
@@ -61,27 +65,16 @@ cash_balance_table = html.Div(
             'name': 'Cash Balance ($)',
                     'type': 'numeric',
                     'format': FormatTemplate.money(0)
-        }, {
-            'id': 'change',
-            'name': 'Change (%)',
-            'type': 'numeric',
-            'format': FormatTemplate.percentage(1).sign(Sign.positive)
-        },
-        ],     style_cell_conditional=[
-            {'if': {'column_id': 'amount'},
-             'width': '57%'},
-            {'if': {'column_id': 'change'},
-             'width': '30%'},
-        ]
+            },
+        ], 
     )
 )
 
 
 transaction_history = pd.DataFrame(OrderedDict([
-    ('date', [date]),
-    ('transaction', ['null']),
-    ('amount', [0]),
-    ('change', [0]),
+    ('date', [Account.objects.get(pk=3).transaction_date]),
+    ('transaction', [Account.objects.get(pk=3).transaction_type]),
+    ('amount', [Account.objects.get(pk=3).transaction_amount]),
 ]))
 
 
@@ -125,8 +118,7 @@ app.layout = html.Div([
     html.Div(dcc.Input(id='input-box', type='text')),
     html.Button('Submit', id='button'),
     transaction_history_table,
-    html.Div(id='output-container-button',
-             children='Enter a value and press submit')
+    html.Div(id='output-container-button')
 ])
 
 
@@ -135,7 +127,7 @@ app.layout = html.Div([
     [dash.dependencies.Input('button', 'n_clicks')],
     [dash.dependencies.State('input-box', 'value')])
 def update_output(n_clicks, value):
-    return 'The input value was "{}"'.format(
+    return '{}'.format(
         value,
         n_clicks
     )

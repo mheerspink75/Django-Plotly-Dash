@@ -43,6 +43,10 @@ https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-u
 
 http://www.learningaboutelectronics.com/Articles/How-to-add-a-price-field-to-a-database-table-in-Django.php
 
+https://books.agiliq.com/projects/django-admin-cookbook/en/latest/change_text.html
+
+https://books.agiliq.com/projects/django-orm-cookbook/en/latest/
+
 
 ### Add user account transactions
 ```
@@ -104,5 +108,33 @@ Account1_user = Account1.user
 'mh1975'
 
 Account.objects.first().user.username
+
+Account.objects.all()
+Account.objects.get(id=1).user.username
+
+Account.objects.get(id=1).account_balance
+Account.objects.get(id=3).cash_balance    
+
+Account.objects.get(id=1)
+
+account = Account.objects.all()
+str(account.query)
+
+
+str(User.objects.all().query)
+
+str(Account.objects.all().query)
+
+User.objects.get(pk=1).account.user.username
+
+Account.objects.count()
+
+Account.objects.values()
+
+User.objects.get(id=1).account.user.username
+
+
+
+
 
 ```
