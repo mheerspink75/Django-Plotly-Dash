@@ -9,7 +9,9 @@
 {% endblock navbar %}
 
 {% block dashinputtable %}
+<div class="container">
     {% plotly_direct name="stock-chart" %}
+</div>
 {% endblock dashinputtable %}
 
 {% else %}

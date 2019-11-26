@@ -9,7 +9,9 @@
 {% endblock navbar %}
 
 {% block cryptotable %}
+<div class="container">
     {% plotly_direct name="crypto-quotes" %}
+</div>
 {% endblock cryptotable %}
 
 {% else %}

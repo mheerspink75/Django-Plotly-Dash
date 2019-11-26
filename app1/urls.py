@@ -12,4 +12,7 @@ urlpatterns = [
   path('stocks/', views.stocks, name='stocks'),
   path('about/', views.about, name='about'),
   path('register/', views.register, name='register'),
+  path("<int:id>", views.index, name="index"),
+  path("create/", views.create, name="index"),
+  path("view/", views.view, name="view"),  
 ]
