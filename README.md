@@ -24,7 +24,7 @@ source django_project/scripts/activate
 ```
 py manage.py runserver
 ```
-
+dev server address:  http://127.0.0.1:8000/
 
 ---
 
