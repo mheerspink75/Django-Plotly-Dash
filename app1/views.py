@@ -5,7 +5,6 @@ from .models import ToDoList, Item
 
 from app1.dashapps import stock_charts2
 from app1.dashapps import crypto_quotes
-from app1.dashapps import ATM
 
 
 ##### Main Pages #####
@@ -42,6 +41,31 @@ def register(response):
     else:
         form = RegisterForm()
     return render(response, 'registration/register.html', {"form":form})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -21,9 +21,9 @@ app = DjangoDash('ATM')
 date = datetime.datetime.now()
 
 account_balance = pd.DataFrame(OrderedDict([
-    ('date', [Account.objects.get(pk=1).account_date]),
-    ('amount', [Account.objects.get(pk=1).account_balance]),
-    ('Username', [Account.objects.get(pk=1).user.username]),
+    ('date', [Account.objects.get(id=1).account_date]),
+    ('amount', [Account.objects.get(id=1).account_balance]),
+    ('Username', [Account.objects.get(id=1).user.username]),
 ]))
 
 
@@ -51,7 +51,7 @@ account_balance_table = html.Div(
 
 
 cash_balance = pd.DataFrame(OrderedDict([
-    ('amount', [Account.objects.get(pk=1).cash_balance]),
+    ('amount', [Account.objects.get(id=1).cash_balance]),
    # ('change', [0]),
 ]))
 
@@ -72,9 +72,9 @@ cash_balance_table = html.Div(
 
 
 transaction_history = pd.DataFrame(OrderedDict([
-    ('date', [Account.objects.get(pk=1).transaction_date]),
-    ('transaction', [Account.objects.get(pk=1).transaction_type]),
-    ('amount', [Account.objects.get(pk=1).transaction_amount]),
+    ('date', [Account.objects.get(id=1).transaction_date]),
+    ('transaction', [Account.objects.get(id=1).transaction_type]),
+    ('amount', [Account.objects.get(id=1).transaction_amount]),
 ]))
 
 
@@ -104,7 +104,7 @@ transaction_history_table = html.Div(
 radio = dcc.RadioItems(
     options=[
         {'label': 'Deposit', 'value': 'NYC'},
-        {'label': 'Withdrawl', 'value': 'MTL'},
+        {'label': 'Withdrawal', 'value': 'MTL'},
     ],
     value='MTL',
     labelStyle={'display': 'inline-block'}
