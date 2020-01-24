@@ -132,5 +132,5 @@ dmypy.json
 .vscode/*
 app1/dashapps/API_KEYS.py
 superuser.txt
-dpd_env/*
+django_project/*
 staticfiles/
