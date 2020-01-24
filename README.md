@@ -20,7 +20,15 @@ virtualenv django_project
 ```
 source django_project/scripts/activate
 ```
-**4.**  Run the dev server
+**4.**  Install the dependencies from requirements.txt
+```
+pip install -r requirements.txt
+```
+**5.**  Collect the static files
+```
+py manage.py collectstatic
+```
+**6.**  Run the dev servier
 ```
 py manage.py runserver
 ```
