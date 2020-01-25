@@ -34,7 +34,9 @@ def get_daily_crypto(symbol):
 
 def get_crypto_daily_line_chart():
     df = get_daily_crypto(symbol)
+
     fig = go.Figure()
+
     fig.add_trace(go.Scatter(x=df.timestamp, y=df['high (USD)'], name="BTC High (USD)",
                              line_color='deepskyblue'))
 
@@ -49,34 +51,7 @@ def get_crypto_daily_line_chart():
     return fig
 
 
-df = get_daily_crypto(symbol).head(1)
-
-table = dash_table.DataTable(
-    id='table',
-    columns=[{"name": i, "id": i} for i in df.columns],
-    data=df.to_dict('records'),
-)
-
 chart = dcc.Graph(figure=(get_crypto_daily_line_chart()))
 
-drop_down = dcc.Dropdown(
-    options=[
-        {'label': 'Bitcoin', 'value': 'BTC'},
-        {'label': 'Etherium', 'value': 'ETH'},
-        {'label': 'Litecoin', 'value': 'LTC'}
-    ],
-    value='MTL'
-)
 
-y = web.DataReader(["USD/BTC", "BTC/USD"], "av-forex",
-                   api_key=API_KEY).reset_index()
-
-quote = dash_table.DataTable(
-    id='table',
-    columns=[{"name": i, "id": i} for i in y.columns],
-    data=y.to_dict('records'),
-)
-
-
-app.layout = html.Div(children=[html.Div(drop_down), 
-    html.Div(table), html.Div(chart), html.Div(quote)])
+app.layout = html.Div(children=[html.Div(chart)])
