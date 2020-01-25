@@ -3,7 +3,6 @@ import pandas_datareader.data as web
 from pandas_datareader import data
 import datetime
 import dash
-import dash_table
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -34,14 +33,8 @@ app.layout = html.Div(children=[
 def update_output_div(input_value):
     x = input_value.upper()
     df = data.DataReader(x, 'yahoo')
-    table_df = df.tail(1).reset_index()
-
-    table = dash_table.DataTable(id='table', columns=[
-                                 {"name": i, "id": i} for i in table_df.columns], 
-                                 data=table_df.to_dict('records'))
 
     fig = go.Figure()
-
 
     fig.add_trace(go.Scatter(x=df.index, y=df.High,
                              name=(input_value.upper() + " High"),
@@ -54,10 +47,10 @@ def update_output_div(input_value):
     fig.update_layout(title=input_value.upper(),
                       font_size=15,
                       xaxis_rangeslider_visible=True,
+                      xaxis_title='Date',
                       yaxis_title='Price (USD)',
-                      xaxis_range=[start, end],
-                      height=600)
+                      xaxis_range=[start, end],)
 
     OHLC_chart = dcc.Graph(figure=(fig))
 
-    return html.Div(children=[html.Div(table), html.Div(OHLC_chart)])
+    return html.Div(children=[html.Div(OHLC_chart)])
