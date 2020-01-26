@@ -2,14 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-from django.contrib.auth.models import (
-    AbstractBaseUser
-)
-class CustomUser(AbstractBaseUser):
-    pass
-
-
-
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     account_balance = models.DecimalField(max_digits=12, decimal_places=2, null=True)
