@@ -138,65 +138,21 @@ User.objects.get(id=1).account.user.username
 
 
 ```
+Django Forms: 
+https://www.youtube.com/playlist?list=PL-51WBLyFTg2vW-_6XBoUpE7vpmoR3ztO
+https://www.youtube.com/watch?v=EX6Tt-ZW0so
 
-requirements.txt
+https://www.youtube.com/watch?v=uu98pqiUJU8&list=PLEsfXFp6DpzTD1BD1aWNxS2Ep06vIkaeW
 
-autopep8==1.4.4
-certifi==2019.9.11
-chardet==3.0.4
-Click==7.0
-dash==1.6.1
-dash-core-components==1.5.1
-dash-html-components==1.0.2
-dash-renderer==1.2.1
-dash-table==4.5.1
-dj-database-url==0.5.0
-Django==2.2.7
-django-crispy-forms==1.8.0
-django-plotly-dash==1.0.2
-dpd-components==0.1.0
-Flask==1.1.1
-Flask-Compress==1.4.0
-future==0.18.2
-gunicorn==20.0.0
-idna==2.8
-itsdangerous==1.1.0
-Jinja2==2.10.3
-lxml==4.4.1
-MarkupSafe==1.1.1
-numpy==1.17.4
-pandas==0.25.3
-pandas-datareader==0.8.1
-plotly==4.3.0
-psycopg2==2.8.4
-pycodestyle==2.5.0
-python-dateutil==2.8.1
-pytz==2019.3
-requests==2.22.0
-retrying==1.3.3
-six==1.13.0
-sqlparse==0.3.0
-urllib3==1.25.7
-Werkzeug==0.16.0
-whitenoise==4.1.4
 
-pip install pur
-pur -r requirements.txt
+Need to do:
 
-Updated autopep8: 1.4.4 -> 1.5
-Updated certifi: 2019.9.11 -> 2019.11.28
-Updated dash: 1.6.1 -> 1.8.0
-Updated dash-core-components: 1.5.1 -> 1.7.0
-Updated dash-renderer: 1.2.1 -> 1.2.3
-Updated dash-table: 4.5.1 -> 4.6.0
-Updated Django: 2.2.7 -> 3.0.2
-Updated django-crispy-forms: 1.8.0 -> 1.8.1
-Updated django-plotly-dash: 1.0.2 -> 1.1.5
-Updated gunicorn: 20.0.0 -> 20.0.4
-Updated lxml: 4.4.1 -> 4.4.2
-Updated numpy: 1.17.4 -> 1.18.1
-Updated plotly: 4.3.0 -> 4.5.0
-Updated six: 1.13.0 -> 1.14.0
-Updated urllib3: 1.25.7 -> 1.25.8
-Updated whitenoise: 4.1.4 -> 5.0.1
-All requirements up-to-date.
+1. Allocate each user an account cash balance automatically when the user is created.
+   
+2. Create a django form that pulls the current BTC/USD price from an API request, allows the user to buy and sell BTC/USD, calculates the transaction amounts, updates the form with the BTC/USD quantities and tracks the portfolio value in USD.
+
+3. The form needs to post to the database when transactions are completed.
+
+4. The form needs to post transaction amounts, order type (buy/sell) and post transaction history to the database.
+
+5. Need to calculate portfolio value from the database and visiualize the data with a chart.
