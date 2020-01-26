@@ -1,12 +1,34 @@
+{% load plotly_dash %}
+{% load tz %}
+
 {% block account_table %}
 
 <div class="container">
   <table class="table table-bordered table-hover">
     <thead class="thead-light">
       <tr>
-        <th scope="col">Account Balance</th>
-        <th scope="col">Username</th>
-        <th scope="col">Date</th>
+        <th scope="col">BTC/USD Exchange Rate</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr>
+        <td class="font-weight-bold">
+          <h3>1 BTC = $8302.26 USD</h3>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  {% block cryptotable %}
+    {% plotly_direct name="crypto-quotes" %}
+  {% endblock cryptotable %}
+
+  <table class="table table-bordered table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Portfolio Balance</th>
+        <th scope="col">USD Balance</th>
+        <th scope="col">BTC Balance</th>
       </tr>
     </thead>
     <tbody class="text-center">
@@ -14,8 +36,8 @@
         <td class="font-weight-bold">
           <h5>${{user.account.account_balance}}</h5>
         </td>
-        <td>{{user.username}}</td>
-        <td>{{user.account.account_date}}</td>
+        <td>$10572.00 USD </td>
+        <td>BTC / USD</td>
       </tr>
     </tbody>
   </table>
@@ -23,20 +45,19 @@
   <div class="input-group mb-3">
     <div class="input-group-prepend">
       <label class="input-group-text" for="inputGroupSelect01"
-        >Transactions
+        >  Transactions - BTC
       </label>
     </div>
     <select class="custom-select" id="inputGroupSelect01">
-      <option selected>Choose...</option>
-      <option value="1">Deposit</option>
-      <option value="2">Withdrawal</option>
-      <option value="3">Transfer</option>
+      <option selected>  ...Choose - Buy / Sell - BTC</option>
+      <option value="1">  Buy - BTC</option>
+      <option value="2">  Sell - BTC</option>
     </select>
     <div class="w-100"></div>
 
     <div class="input-group-prepend">
       <span class="input-group-text">Amount</span>
-      <span class="input-group-text">$</span>
+      <span class="input-group-text">$ USD</span>
     </div>
 
     <input
@@ -54,22 +75,7 @@
   <table class="table table-bordered table-hover">
     <thead class="thead-light">
       <tr>
-        <th scope="col">Cash Balance</th>
-      </tr>
-    </thead>
-    <tbody class="text-center">
-      <tr>
-        <td class="font-weight-bold">
-          <h3>${{user.account.cash_balance}}</h3>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table class="table table-bordered table-hover">
-    <thead class="thead-light">
-      <tr>
-        <th scope="col">Transactions</th>
+        <th scope="col">Transaction History</th>
         <th scope="col">Type</th>
         <th scope="col">Amount</th>
       </tr>
@@ -77,11 +83,12 @@
     <tbody class="text-right">
       <tr>
         <td>{{user.account.transaction_date}}</td>
-        <td>{{user.account.transaction_type}}</td>
+        <td>Buy</td>
         <td class="text-center">$ {{user.account.transaction_amount}}</td>
       </tr>
     </tbody>
   </table>
+
 </div>
 
 {% endblock %}
