@@ -28,12 +28,18 @@ pip install -r requirements.txt
 ```
 py manage.py collectstatic
 ```
-**6.**  Run the dev servier
+**6.**  Migrate the Database
+```
+py manage.py makemigrations
+py manage.py migrate
+```
+**7.**  Run the dev server
 ```
 py manage.py runserver
 ```
 dev server address:  http://127.0.0.1:8000/
 
+**8.** Create a user account and log in
 ---
 
 **Name:  Matt Heerspink**  
