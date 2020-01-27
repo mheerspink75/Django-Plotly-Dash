@@ -1,16 +1,15 @@
 <div class="container">
     <div class="home">
         <div class="card">
-            <div class="card-header">Profile</div>
+            <div class="card-header">Account Profile:  </div>
                 <div class="card-body b4">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Username:   {{user.username}}</li>
                         <li class="list-group-item">Email:      {{user.email}}</li>
                         <li class="list-group-item">First Name: {{user.first_name}}</li>
                         <li class="list-group-item">Last Name:  {{user.last_name}}</li>
-                        <li class="list-group-item">Joined:     {{user.date_joined}}</li>
-                        <li class="list-group-item">Last Login: {{user.last_login}}</li>
                         <li class="list-group-item">Account Created: {{ user.account.account_date }} </li>
+                        <li class="list-group-item">Last Login: {{user.last_login}}</li>
                     </ul>
                     <div class="card-footer" style="text-align: right;">
                         <a href="#" class="card-link">Update Profile</a>

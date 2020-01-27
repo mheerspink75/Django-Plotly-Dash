@@ -1,0 +1,56 @@
+{% extends "base.html" %} 
+{% load plotly_dash %} 
+
+{% block content %} 
+
+{% if user.is_authenticated %} 
+
+{% block navbar %} 
+    {% include './components/DASHBOARD_navbar.html' %} 
+{% endblock navbar %}
+
+<div class="container">
+<table class="table table-bordered table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Portfolio Balance</th>
+        <th scope="col">USD Balance</th>
+        <th scope="col">BTC Balance</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr>
+        <td class="font-weight-bold">
+          <h5>${{user.account.account_balance}}</h5>
+        </td>
+        <td>${{user.account.account_balance}}</td>
+        <td>0 BTC = $0 USD</td>
+      </tr>
+    </tbody>
+</table>
+</div>
+
+{% block cryptotable %}
+<div class="container">
+    {% plotly_direct name="crypto-quotes" %}
+</div>
+{% endblock cryptotable %}
+
+{% block sidebar %}
+    {% include './components/user_info.html' %}
+{% endblock sidebar %}
+
+{% else %} 
+
+{% block login_message %}
+<div class="container">
+    <p>
+        Please <a href="{% url 'login' %}" class="">Login </a>to view this content
+    </p>
+</div>
+{% endblock login_message %}
+
+ {% endif %} 
+
+ {% endblock %}
+
