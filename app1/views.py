@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms.forms import RegisterForm, CreateNewList
+from .forms.forms import RegisterForm
 from django.http import HttpResponse, HttpResponseRedirect
 
 from app1.dashapps import stock_charts2
@@ -9,7 +9,7 @@ from app1.dashapps import crypto_quotes
 ##### Main Pages #####
 
 def home(request):
-    return render(request, 'app1/pages/index.html', {})
+    return render(request, 'app1/pages/index.html')
 
 
 def DASHBOARD(request):
