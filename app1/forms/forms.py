@@ -11,6 +11,3 @@ class RegisterForm(UserCreationForm):
         model = User
         fields = ["username", "email", "password1", "password2"]
 
-class CreateNewList(forms.Form):
-    name = forms.CharField(label="Name", max_length=200)
-    check = forms.BooleanField()
