@@ -156,3 +156,14 @@ Need to do:
 4. The form needs to post transaction amounts, order type (buy/sell) and post transaction history to the database.
 
 5. Need to calculate portfolio value from the database and visiualize the data with a chart.
+
+6. Models needs a transaction class for buys and sells.
+
+7. Foriegn Key goes in the account class that points at the transaction similar to the blog post tutorial.
+
+
+
+https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+https://docs.djangoproject.com/en/dev/topics/auth/customizing/#extending-the-existing-user-model
+https://docs.djangoproject.com/en/dev/topics/auth/customizing/#substituting-a-custom-user-model
+
