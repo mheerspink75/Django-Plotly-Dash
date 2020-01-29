@@ -21,10 +21,10 @@
     <tbody class="text-center">
       <tr>
         <td class="font-weight-bold">
-          <h5>${{user.account.account_balance}}</h5>
+          <h5>${{user.account.portfolio_balance}}</h5>
         </td>
-        <td>${{user.account.account_balance}}</td>
-        <td>0 BTC = $0 USD</td>
+        <td>${{user.account.usd_balance}}</td>
+        <td>{{user.account.bitcoin_balance}} BTC = ${{user.account.bitcoin_price}} USD</td>
       </tr>
     </tbody>
 </table>

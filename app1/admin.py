@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Account
 
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('user', 'account_balance', 'account_date', 'cash_balance', 'transaction_date', 'transaction_type', 'transaction_amount')
+    list_display = ('user', 'portfolio_balance', 'usd_balance', 'bitcoin_balance')
 
 admin.site.register(Account, AccountAdmin)
 

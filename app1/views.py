@@ -38,6 +38,10 @@ def register(response):
     return render(response, 'registration/register.html', {"form":form})
 
 
+#### Jinja Test ####
+
+
+
 
 
 
