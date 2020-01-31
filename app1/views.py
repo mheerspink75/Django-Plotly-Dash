@@ -5,6 +5,15 @@ from django.http import HttpResponse, HttpResponseRedirect
 from app1.dashapps import stock_charts2
 from app1.dashapps import crypto_quotes
 
+import requests
+import json
+
+
+
+# Get BTC Price Data
+bitcoin_price_request = requests.get('https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD')
+bitcoin_price = json.loads(bitcoin_price_request.content)
+
 
 ##### Main Pages #####
 
@@ -13,7 +22,23 @@ def home(request):
 
 
 def DASHBOARD(request):
-    return render(request, 'app1/pages/DASHBOARD.html')
+    test = request.user.account.user # User.objects.get(id=1).account.user
+
+    # Get User Info
+    usd_balance = request.user.account.usd_balance
+    bitcoin_balance = request.user.account.bitcoin_balance
+    user_btc_balance = (float(bitcoin_balance) * bitcoin_price['USD'])
+
+    # Calculate Portfolio Balance
+    math = ((user_btc_balance) + float(usd_balance))
+    portfolio_balance = str(math)
+
+    return render(request, 'app1/pages/DASHBOARD.html',
+                  {'bitcoin_price': bitcoin_price,
+                   'usd_balance': usd_balance,
+                   'portfolio_balance': portfolio_balance,
+                   'user_btc_balance': user_btc_balance,
+                   'test': test})
 
 
 def stocks(request):
@@ -21,8 +46,8 @@ def stocks(request):
 
 
 def account(request):
-    return render(request, 'app1/pages/account.html')
-
+    return render(request, 'app1/pages/account.html',
+                  {'bitcoin_price': bitcoin_price})
 
 
 #### Registration/Login #####
@@ -31,93 +56,16 @@ def register(response):
     if response.method == "POST":
         form = RegisterForm(response.POST)
         if form.is_valid():
+
+            print(response.POST['username'])
+            print(response.POST)
+            try:
+                User.objects.get(username = response.POST['username'])
+            except User.DoesNotExist:
+                print('User does not exist')
             form.save()
             return redirect(home)
     else:
         form = RegisterForm()
-    return render(response, 'registration/register.html', {"form":form})
-
-
-#### Jinja Test ####
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##### User Lists #####
-
-def index(response, id):
-    ls = ToDoList.objects.get(id=id)
-
-    if ls in response.user.todolist.all():
-
-        if response.method == "POST":
-            if response.POST.get("save"):
-                for item in ls.item_set.all():
-                    if response.POST.get("c" + str(item.id)) == "clicked":
-                        item.complete = True
-                else:
-                    item.complete = False
-        
-                item.save()
-    
-            elif response.POST.get("newItem"):
-                txt = response.POST.get("new")
-        
-                if len(txt) > 2:
-                    ls.item_set.create(text=txt, complete=False)
-                else:
-                    print("invalid")
-    
-    
-        return render(response, "app1/pages/list.html", {"ls":ls})
-    
-    return render(response, "app1/pages/view.html", {})
-
-
-def create(response):
-    if response.method == "POST":
-        form = CreateNewList(response.POST)
-
-        if form.is_valid():
-            n = form.cleaned_data["name"]
-            t = ToDoList(name=n)
-            t.save()
-            response.user.todolist.add(t)
-
-        return HttpResponseRedirect("/%i" %t.id)
-
-    else:
-        form = CreateNewList()
-
-    return render(response, "app1/pages/create.html", {"form":form})
-
-
-def view(response):
-    return render(response, "app1/pages/view.html", {})
-
+    return render(response, 'registration/register.html', {"form": form})
 
