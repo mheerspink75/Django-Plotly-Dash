@@ -3,21 +3,11 @@
 {% block account_table %}
 
 <div class="container">
+
+  {% block btc_exchange_rate %}
+    {% include "./btc_exchange_rate.html" %}
+  {% endblock btc_exchange_rate %}
   
-  <table class="table table-bordered table-hover">
-    <thead class="thead-light">
-      <tr>
-        <th scope="col">BTC/USD Exchange Rate</th>
-      </tr>
-    </thead>
-    <tbody class="text-center">
-      <tr>
-        <td class="font-weight-bold">
-          <h3>1 BTC = {{user.account.bitcoin_price}}</h3>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
   {% block cryptotable %}
     {% plotly_direct name="crypto-quotes" %}
@@ -34,10 +24,10 @@
     <tbody class="text-center">
       <tr>
         <td class="font-weight-bold">
-          <h5>${{user.account.portfolio_balance}}</h5>
+          <h5>${{portfolio_balance}}</h5>
         </td>
-        <td>${{user.account.usd_balance}}</td>
-        <td>{{user.account.bitcoin_balance}} BTC = ${{user.account.bitcoin_price}} USD</td>
+        <td>${{usd_balance}}</td>
+        <td>{{user.account.bitcoin_balance}} BTC = ${{user_btc_balance}} USD</td>
       </tr>
     </tbody>
   </table>
@@ -71,6 +61,9 @@
       </button>
     </div>
   </div>
+
+  {{test}}
+
 <!--
   <table class="table table-bordered table-hover">
     <thead class="thead-light">

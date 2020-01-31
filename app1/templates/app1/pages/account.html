@@ -10,24 +10,9 @@
 {% endblock navbar %}
 
 <div class="container">
-<table class="table table-bordered table-hover">
-    <thead class="thead-light">
-      <tr>
-        <th scope="col">Portfolio Balance</th>
-        <th scope="col">USD Balance</th>
-        <th scope="col">BTC Balance</th>
-      </tr>
-    </thead>
-    <tbody class="text-center">
-      <tr>
-        <td class="font-weight-bold">
-          <h5>${{user.account.portfolio_balance}}</h5>
-        </td>
-        <td>${{user.account.usd_balance}}</td>
-        <td>{{user.account.bitcoin_balance}} BTC = ${{user.account.bitcoin_price}} USD</td>
-      </tr>
-    </tbody>
-</table>
+  {% block btc_exchange_rate %}
+    {% include "./components/btc_exchange_rate.html" %}
+  {% endblock btc_exchange_rate %}
 </div>
 
 {% block cryptotable %}
