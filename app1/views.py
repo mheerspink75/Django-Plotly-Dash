@@ -9,7 +9,6 @@ import requests
 import json
 
 
-
 # Get BTC Price Data
 bitcoin_price_request = requests.get('https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD')
 bitcoin_price = json.loads(bitcoin_price_request.content)
@@ -32,6 +31,8 @@ def DASHBOARD(request):
     # Calculate Portfolio Balance
     math = ((user_btc_balance) + float(usd_balance))
     portfolio_balance = str(math)
+
+    # Save the Portfolio Balance
 
     return render(request, 'app1/pages/DASHBOARD.html',
                   {'bitcoin_price': bitcoin_price,
@@ -59,10 +60,10 @@ def register(response):
 
             print(response.POST['username'])
             print(response.POST)
-            try:
-                User.objects.get(username = response.POST['username'])
-            except User.DoesNotExist:
-                print('User does not exist')
+          #  try:
+           #     User.objects.get(username = response.POST['username'])
+          # except User.DoesNotExist:
+           #     print('User does not exist')
             form.save()
             return redirect(home)
     else:
