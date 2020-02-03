@@ -1,41 +1,40 @@
-{% extends "base.html" %} 
-{% load plotly_dash %} 
-
-{% block content %} 
+{% extends "base.html" %}
+{% block content %}
 
 {% if user.is_authenticated %} 
 
 {% block navbar %} 
-    {% include './components/DASHBOARD_navbar.html' %} 
+{% include './components/DASHBOARD_navbar.html' %}
 {% endblock navbar %}
 
-<div class="container">
-  {% block btc_exchange_rate %}
-    {% include "./components/btc_exchange_rate.html" %}
-  {% endblock btc_exchange_rate %}
-</div>
 
-{% block cryptotable %}
-<div class="container">
-    {% plotly_direct name="crypto-quotes" %}
+<div class="container-fluid" style="margin-top: 1rem; ">
+  <div class="row">
+    {% for news in news.Data %}
+        <div class="col-sm" style="margin-bottom: 1rem;">
+                <div class="card" style="width: 15rem;">
+                <img src="{{news.imageurl}}" class="card-img-top" alt="{{news.source}}" />
+                <div class="card-body">
+                    <h5 class="card-title">{{news.title}}</h5>
+                    <p class="card-text"></p>
+                    <a href="{{news.url}}" class="btn btn-secondary">Read More...</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+  </div>
 </div>
-{% endblock cryptotable %}
-
-{% block sidebar %}
-    {% include './components/user_info.html' %}
-{% endblock sidebar %}
 
 {% else %} 
 
 {% block login_message %}
 <div class="container">
-    <p>
-        Please <a href="{% url 'login' %}" class="">Login </a>to view this content
-    </p>
+  <p>
+    Please <a href="{% url 'login' %}" class="">Login </a>to view this content
+  </p>
 </div>
-{% endblock login_message %}
+{% endblock login_message %} 
 
- {% endif %} 
+{% endif %}
 
- {% endblock %}
-
+{% endblock %}

@@ -8,7 +8,21 @@
     {% include './components/DASHBOARD_navbar.html' %}
 {% endblock navbar %}
 
+{% block quote %}
+<div class="row" style="margin-top: 1rem;">
+    <div class="col">
+        <form class="form-inline" method="POST" action="{% url 'search' %}">
+            <div class="form-group mx-sm-3 mb-2">
+                {% csrf_token %}
+                <input type="search" class="form-control" placeholder="Enter symbols..." aria-label="Search" name="quote">
+            </div>
+            <button type="submit" class="btn btn-outline-secondary mb-2">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock quote %}
 
+{% block search_result %}
 <table class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
@@ -19,11 +33,8 @@
         <th scope="col">Market Cap</th>
       </tr>
     </thead> 
-
     <tbody>
-
-    {% for key,value in symbol.DISPLAY.items %}
-
+    {% for key,value in crypto.DISPLAY.items %}
       <tr>
         <td>{{key}}</td>
         <td>{{value.USD.PRICE}}</td>
@@ -31,22 +42,21 @@
         <td>{{value.USD.LOWDAY}}</td>
         <td>{{value.USD.MKTCAP}}</td>
       </tr>
-
     {% endfor %}
-
     </tbody>
   </table>
-
-
+{% endblock search_result %}
 
 
 
 {% else %}
+
 <div class="container">
     {% block login_message %}
     <p class="">Please <a href="{% url 'login' %}" class="">Login </a>to view this content</p>
     {% endblock login_message %}
 </div>
+
 {% endif %}
 
 

@@ -1,0 +1,18 @@
+<table class="table table-bordered table-hover" style="margin-top: 1rem;">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Portfolio Balance</th>
+        <th scope="col">USD Balance</th>
+        <th scope="col">BTC Balance</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr>
+        <td class="font-weight-bold">
+          <h5>${{portfolio_balance}}</h5>
+        </td>
+        <td>${{usd_balance}}</td>
+        <td>{{user.account.bitcoin_balance}} BTC = ${{user_btc_balance}} USD</td>
+      </tr>
+    </tbody>
+  </table>
