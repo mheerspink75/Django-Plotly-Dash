@@ -16,3 +16,4 @@ def create_user_account(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_account(sender, instance, **kwargs):
     instance.account.save()
+
