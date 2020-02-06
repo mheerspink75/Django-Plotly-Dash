@@ -1,32 +1,63 @@
-{% extends "base.html" %} 
-{% block content %} 
+{% extends "base.html" %}
+{% load plotly_dash %}
 
-{% if user.is_authenticated %} 
+{% block content %}
 
-{% block navbar %} 
-{% include './components/DASHBOARD_navbar.html' %} 
+{% if user.is_authenticated %}
+
+{% block navbar %}
+{% include './components/DASHBOARD_navbar.html' %}
 {% endblock navbar %}
+
+<!-- BTC Table -->
+<table class="table table-bordered table-hover">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Currency</th>
+      <th scope="col">Price</th>
+      <th scope="col">24hr High</th>
+      <th scope="col">24hr Low</th>
+      <th scope="col">Market Cap</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key,value in symbol.DISPLAY.items %}
+    <tr>
+      <td class="font-weight-bold">{{key}}</td>
+      <td class="font-weight-bold">{{value.USD.PRICE}}</td>
+      <td>{{value.USD.HIGHDAY}}</td>
+      <td>{{value.USD.LOWDAY}}</td>
+      <td>{{value.USD.MKTCAP}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Time Series Chart -->
+{% block cryptotable %} 
+{% plotly_direct name="crypto-chart2" %}
+{% endblock cryptotable %}
 
 <!-- Portfolio Table -->
 <table class="table table-bordered table-hover">
   <thead class="thead-light">
     <tr>
-      <th scope="col">Portfolio Balance (USD)</th>
+      <th
+       scope="col">Portfolio Balance (USD Value)</th>
+       <th scope="col">Portfolio Bitcoin Value (BTC / USD)</th>
       <th scope="col">Portfolio USD Balance (CASH)</th>
-      <th scope="col">Portfolio Bitcoin Value (BTC / USD)</th>
-      <th scope="col">BTC/USD Exchange Rate</th>
     </tr>
   </thead>
   <tbody class="text-center">
     <tr>
-        <td class="font-weight-bold">$ {{portfolio_balance}}</td>
-        <td class="font-weight-bold">$ {{usd_balance}}</td>
-        <td class="font-weight-bold">{{user.account.bitcoin_balance}} BTC / $ {{user_btc_balance}}</td>
-        <td class="font-weight-bold">1 BTC = ${{bitcoin_price.USD}}</td>
+      <td class="font-weight-bold">$ {{portfolio_balance}}</td>
+      <td class="">
+        <strong>{{user.account.bitcoin_balance}} BTC</strong> / ${{user_btc_balance}}
+      </td>
+      <td class="font-weight-bold">$ {{usd_balance}}</td>
     </tr>
   </tbody>
 </table>
-
 
 <!-- Buy Transactions -->
 <div class="row" style="margin-top: 1rem;">
@@ -50,38 +81,37 @@
   </div>
 </div>
 
-<!-- Portfolio Table -->
+<!-- Transaction Table -->
 <table class="table table-bordered table-hover">
-    <thead class="thead-light">
-        <tr>
-        <th scope="col">Transaction Date</th>
-        <th scope="col">Transaction Type</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">BTC Price (USD)</th>
-        <th scope="col">Total (USD)</th>
-        </tr>
-    </thead>
-    <tbody class="text-center">
-        <tr>
-            <td class="font-weight-bold">
-                {{date}}
-            </td>
-            <td class="font-weight-bold">
-                {{transaction_type}}
-            </td>
-            <td class="font-weight-bold">
-                {{buy_BTC}}
-            </td>
-            <td class="font-weight-bold">
-                {{exchange_rate}}
-            </td>
-            <td class="font-weight-bold">
-                {{usd_value}}
-            </td>
-        </tr>
-    </tbody>
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Transaction Date</th>
+      <th scope="col">Transaction Type</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">BTC Price (USD)</th>
+      <th scope="col">Total (USD)</th>
+    </tr>
+  </thead>
+  <tbody class="text-center">
+    <tr>
+      <td class="font-weight-bold">
+        {{date}}
+      </td>
+      <td class="font-weight-bold">
+        {{transaction_type}}
+      </td>
+      <td class="font-weight-bold">
+        {{buy_BTC}}
+      </td>
+      <td class="font-weight-bold">
+        {{exchange_rate}}
+      </td>
+      <td class="font-weight-bold">
+        {{usd_value}}
+      </td>
+    </tr>
+  </tbody>
 </table>
-
 
 {% else %}
 
@@ -89,8 +119,10 @@
   {% block login_message %}
   <p class="">
     Please <a href="{% url 'login' %}" class="">Login </a>to view this content
-  
-  {% endblock login_message %}
+    {% endblock login_message %}
+  </p>
 </div>
 
-{% endif %} {% endblock %}
+{% endif %} 
+
+{% endblock %}

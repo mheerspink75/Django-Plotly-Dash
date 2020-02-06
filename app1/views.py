@@ -5,6 +5,7 @@ from .models import Account
 import datetime
 
 from app1.dashapps import crypto_quotes
+from app1.dashapps import crypto_charts2
 
 import requests
 import json
@@ -19,7 +20,7 @@ news_request = requests.get('https://min-api.cryptocompare.com/data/v2/news/?lan
 news = json.loads(news_request.content)
 
 # Get BTC Full Data
-coins = 'BTC,ETH,XRP,BCH,EOS,LTC,XLM,ADA,USDT,MIOTA,TRX'
+coins = 'BTC'
 symbol_request = requests.get('https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
 symbol = json.loads(symbol_request.content)
 
@@ -73,6 +74,11 @@ def test_page(request):
     # Get BTC Price Data
     bitcoin_price_request = requests.get('https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD')
     bitcoin_price = json.loads(bitcoin_price_request.content)
+
+    # Get BTC Full Data
+    coins = 'BTC'
+    symbol_request = requests.get('https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
+    symbol = json.loads(symbol_request.content)
 
     # Get user info from db
     usd_balance = request.user.account.usd_balance
@@ -141,13 +147,15 @@ def test_page(request):
                    'add_BTC': add_BTC,
                    'usd_value': usd_value,
                    'exchange_rate': exchange_rate,
-                   'date': date})
+                   'date': date,
+                   'symbol': symbol})
     else:
         return render(request, 'app1/pages/test_page.html',
                     {'bitcoin_price': bitcoin_price,
                     'usd_balance': usd_balance,
                     'portfolio_balance': portfolio_balance,
-                    'user_btc_balance': user_btc_balance})
+                    'user_btc_balance': user_btc_balance,
+                    'symbol': symbol})
 
 
 #### Registration/Login #####
