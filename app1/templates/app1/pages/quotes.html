@@ -11,7 +11,7 @@
 {% block quote %}
 <div class="row" style="margin-top: 1rem;">
     <div class="col">
-        <form class="form-inline" method="POST" action="{% url 'search' %}">
+        <form class="form-inline" method="POST" action="{% url 'quotes' %}">
             <div class="form-group mx-sm-3 mb-2">
                 {% csrf_token %}
                 <input type="search" class="form-control" placeholder="Enter symbols..." aria-label="Search" name="quote">

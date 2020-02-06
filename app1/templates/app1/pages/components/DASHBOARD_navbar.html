@@ -25,16 +25,20 @@
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link Stock-Quotes" href="{% url 'account' %}"
-          >Account Performance</a>
+          <a class="nav-link Stock-Quotes" href="{% url 'crypto_news' %}"
+          >News</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link About" href="{% url 'stocks' %}"
-          >Stock Quotes</a>
+          <a class="nav-link About" href="{% url 'markets' %}"
+          >Markets</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link About" href="{% url 'search' %}"
-          >Crypto Quotes</a>
+          <a class="nav-link About" href="{% url 'quotes' %}"
+          >Quotes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link About" href="{% url 'test_page' %}"
+          >Test Page</a>
         </li>
         <li>
           <a class="nav-link Logout" href="{% url 'logout' %}"
