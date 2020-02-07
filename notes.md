@@ -147,19 +147,31 @@ https://www.youtube.com/watch?v=uu98pqiUJU8&list=PLEsfXFp6DpzTD1BD1aWNxS2Ep06vIk
 
 Need to do:
 
-1. Allocate each user an account cash balance automatically when the user is created.
+1. Allocate each user an account cash balance automatically when the user is created. X
    
-2. Create a django form that pulls the current BTC/USD price from an API request, allows the user to buy and sell BTC/USD, calculates the transaction amounts, updates the form with the BTC/USD quantities and tracks the portfolio value in USD.
+2. Create a django form that pulls the current BTC/USD price from an API request, allows the user to buy and sell BTC/USD, calculates the transaction amounts, updates the form with the BTC/USD quantities and tracks the portfolio value in USD. X
 
-3. The form needs to post to the database when transactions are completed.
+3. The form needs to post to the database when transactions are completed. X
 
 4. The form needs to post transaction amounts, order type (buy/sell) and post transaction history to the database.
 
-5. Need to calculate portfolio value from the database and visiualize the data with a chart.
+5. Need to calculate portfolio value from the database  X and visiualize the data with a chart.
 
-6. Models needs a transaction class for buys and sells.
+6. Models needs a transaction class for buys and sells. X
 
-7. Foriegn Key goes in the account class that points at the transaction similar to the blog post tutorial.
+7. Foriegn Key goes in the account class that points at the transaction similar to the blog post tutorial. X
+
+
+-------------------------
+1. build models and views to log transactions, The form needs to post transaction amounts, order type (buy/sell) and post transaction history to the database.
+
+2. Visiualize user portfolio history.
+
+3. Work on styling the site.
+
+4. Add buy and sell user interface.
+
+5. Add chart update search results to symbol lookup.
 
 
 

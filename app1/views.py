@@ -44,27 +44,28 @@ def DASHBOARD(request):
     usd_balance = request.user.account.usd_balance
     bitcoin_balance = request.user.account.bitcoin_balance
 
-    # Calculate the BTC/USD value
-    user_btc_balance = round(
-        (float(bitcoin_balance) * bitcoin_price['USD']), 2)
-
-    # Calculate the total porfolio balance
-    portfolio_balance = round((user_btc_balance) + float(usd_balance), 2)
+    error = ''
 
     if request.method == "POST":
         # Print BTC Existing Quantity
-        print("---pre save---\nexisting BTC quantity: ", bitcoin_balance)
+        print("existing BTC quantity: ", bitcoin_balance)
 
-        # Buy BTC Quantity
-        buy_BTC = request.POST['buy_BTC']
+        # Select BUY / SELL
+        buy_sell = request.POST['buy_sell']
+        print(buy_sell)
+
+        # BUY / SELL BTC Quantity
+        buy_BTC = float(request.POST['buy_BTC'])
+        if buy_sell == 'sell':
+            buy_BTC = buy_BTC * -1
         print("buy/sell btc quantity: ", buy_BTC)
 
         # USD Value of Purchase Amount
-        usd_value = (float(buy_BTC) * bitcoin_price['USD'])
+        usd_value = (buy_BTC * bitcoin_price['USD'])
         print("buy/sell btc quantity (usd value): ", usd_value)
 
         # Add BTC Quantity
-        add_BTC = round((float(buy_BTC) + float(bitcoin_balance)), 2)
+        add_BTC = round(buy_BTC + float(bitcoin_balance), 2)
         print("add/subtract btc buy/sell quantity to/from existing btc quantity: ", add_BTC)
 
         # Pay for the BTC with Cash
@@ -75,8 +76,68 @@ def DASHBOARD(request):
         x = request.user.account
         x.bitcoin_balance = add_BTC
         x.usd_balance = usd_sale
-        x.save()
 
+        if x.usd_balance >= 0 and x.bitcoin_balance >= 0:
+            print('if', x.usd_balance, x.bitcoin_balance )
+            x.save()
+            usd_balance = x.usd_balance 
+            bitcoin_balance = x.bitcoin_balance
+        else:
+            error = 'Insufficient funds. Please consult your doctor.'          
+
+    # Calculate the BTC/USD value
+    user_btc_balance = round(
+        (float(bitcoin_balance) * bitcoin_price['USD']), 2)
+
+    # Calculate the total porfolio balance
+    portfolio_balance = round((user_btc_balance) + float(usd_balance), 2)
+
+    return render(request, 'app1/pages/DASHBOARD.html',
+                    {'bitcoin_price': bitcoin_price,
+                    'usd_balance': usd_balance,
+                    'portfolio_balance': portfolio_balance,
+                    'user_btc_balance': user_btc_balance,
+                    'bitcoin_balance': bitcoin_balance,
+                    'symbol': symbol,
+                    'error': error})
+
+
+def quotes(request):
+    # Get BTC Full Data
+    coins = 'BTC'
+    symbol_request = requests.get(
+        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
+    symbol = json.loads(symbol_request.content)
+
+    # Get Multiple Currency Full Data
+    multi_coin = 'BTC,ETH,BCH,ETC,XRP,BSV,EOS,LTC,TRX,OKB,BNB,DASH'
+    mc_request = requests.get(
+        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + multi_coin + '&tsyms=USD')
+    mc_symbol = json.loads(mc_request.content)
+
+    if request.method == 'POST':
+        quote = request.POST['quote']
+        quote = quote.upper()
+        crypto_request = requests.get(
+            'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + quote + '&tsyms=USD')
+        crypto = json.loads(crypto_request.content)
+    else:
+        crypto = symbol
+    return render(request, 'app1/pages/quotes.html', {'crypto': crypto, 'mc_symbol': mc_symbol})
+
+
+def crypto_news(request):
+    # Get News Feed
+    news_request = requests.get(
+        'https://min-api.cryptocompare.com/data/v2/news/?lang=EN')
+    news = json.loads(news_request.content)
+    return render(request, 'app1/pages/crypto_news.html', {'news': news})
+
+
+
+
+
+"""
         # Print Datetime
         date = datetime.datetime.now()
         print(datetime.datetime.now())
@@ -110,43 +171,6 @@ def DASHBOARD(request):
                        'usd_value': usd_value,
                        'exchange_rate': exchange_rate,
                        'date': date,
-                       'symbol': symbol})
-    else:
-        return render(request, 'app1/pages/DASHBOARD.html',
-                      {'bitcoin_price': bitcoin_price,
-                       'usd_balance': usd_balance,
-                       'portfolio_balance': portfolio_balance,
-                       'user_btc_balance': user_btc_balance,
-                       'symbol': symbol})
-
-
-def quotes(request):
-    # Get BTC Full Data
-    coins = 'BTC'
-    symbol_request = requests.get(
-        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
-    symbol = json.loads(symbol_request.content)
-
-    # Get Multiple Currency Full Data
-    multi_coin = 'BTC,ETH,BCH,ETC,XRP,BSV,EOS,LTC,TRX,OKB,BNB,DASH'
-    mc_request = requests.get(
-        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + multi_coin + '&tsyms=USD')
-    mc_symbol = json.loads(mc_request.content)
-
-    if request.method == 'POST':
-        quote = request.POST['quote']
-        quote = quote.upper()
-        crypto_request = requests.get(
-            'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + quote + '&tsyms=USD')
-        crypto = json.loads(crypto_request.content)
-    else:
-        crypto = symbol
-    return render(request, 'app1/pages/quotes.html', {'crypto': crypto, 'mc_symbol': mc_symbol})
-
-
-def crypto_news(request):
-    # Get News Feed
-    news_request = requests.get(
-        'https://min-api.cryptocompare.com/data/v2/news/?lang=EN')
-    news = json.loads(news_request.content)
-    return render(request, 'app1/pages/crypto_news.html', {'news': news})
+                       'symbol': symbol,
+                       'error': error})
+"""
