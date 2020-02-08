@@ -182,3 +182,10 @@ https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-u
 https://docs.djangoproject.com/en/dev/topics/auth/customizing/#extending-the-existing-user-model
 https://docs.djangoproject.com/en/dev/topics/auth/customizing/#substituting-a-custom-user-model
 
+
+
+
+=> Duplicate the workspace.
+
+Open the command pannel ctrl+shift+p or F1. Then write dupl
+

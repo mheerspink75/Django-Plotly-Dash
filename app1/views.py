@@ -11,7 +11,7 @@ import requests
 import json
 
 from app1.dashapps import crypto_charts2
-from app1.dashapps import stock_charts2 
+from app1.dashapps import stock_charts2
 
 
 #### Registration/Login #####
@@ -43,73 +43,80 @@ def DASHBOARD(request):
         'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
     symbol = json.loads(symbol_request.content)
 
-    # Get user info from db
+    # Get BTC and USD balance from db
     usd_balance = request.user.account.usd_balance
     bitcoin_balance = request.user.account.bitcoin_balance
 
+    # Get transaction history from db
     transaction_history = models.Transaction.objects.order_by('transaction_date')
     print(transaction_history)
 
     error = ''
 
     if request.method == "POST":
-        # Print BTC Existing Quantity
-        print("existing BTC quantity: ", bitcoin_balance)
+        # Print BTC Existing Balance before sale
+        print("---\nBTC BALANCE: ", bitcoin_balance)
+        print("USD BALANCE: $", usd_balance)
+        print("PORTFOLIO TOTAL (USD): $", round((float(bitcoin_balance) * bitcoin_price['USD']) + float(usd_balance), 2))
 
         # Select BUY / SELL
-        buy_sell = request.POST['buy_sell']
-        print(buy_sell)
+        BUY_SELL = request.POST['BUY_SELL']
+        print('---\nBUY/SELL BTC: ', BUY_SELL)
 
         # BUY / SELL BTC Quantity
-        buy_BTC = float(request.POST['buy_BTC'])
-        if buy_sell == 'SELL':
-            buy_BTC = buy_BTC * -1
-        print("buy/sell btc quantity: ", buy_BTC)
+        BUY_BTC = float(request.POST['BUY_BTC'])
+        if BUY_SELL == 'SELL':
+            BUY_BTC = BUY_BTC * -1
+            print("SELL BTC Quantity: ", BUY_BTC)
+        else:
+            print("BUY BTC Quantity: +", BUY_BTC)
 
+        # USD Value of Purchase
+        USD_SALE_PRICE = (BUY_BTC * bitcoin_price['USD'])
+        if BUY_SELL == 'SELL':
+            print("SELL BTC (USD PRICE): + $", (USD_SALE_PRICE * -1))
+        else:
+            print("BUY BTC (USD PRICE): - $", USD_SALE_PRICE)
 
-        # USD Value of Purchase Amount
-        usd_value = (buy_BTC * bitcoin_price['USD'])
-        print("buy/sell btc quantity (usd value): ", usd_value)
+        # Update BTC Balance
+        UPDATE_BTC = round(BUY_BTC + float(bitcoin_balance), 2)
+        print("---\nUPDATE BTC BALANCE : ", UPDATE_BTC)
 
-        # Add BTC Quantity
-        add_BTC = round(buy_BTC + float(bitcoin_balance), 2)
-        print("add/subtract btc buy/sell quantity to/from existing btc quantity: ", add_BTC)
-
-        # Pay for the BTC with Cash
-        usd_sale = round(float(usd_balance) - (usd_value), 2)
-        print("portfolio total USD balance after sale: ", usd_sale)
+        # Update USD Balance
+        UPDATE_USD = round(float(usd_balance) - (USD_SALE_PRICE), 2)
+        print("UPDATE USD BALANCE: $", UPDATE_USD)
 
         # Save to the Database
         x = request.user.account
-        x.bitcoin_balance = add_BTC
-        x.usd_balance = usd_sale
+        x.bitcoin_balance = UPDATE_BTC
+        x.usd_balance = UPDATE_USD
 
+        # Check for insufficient funds update db
         if x.usd_balance >= 0 and x.bitcoin_balance >= 0:
-            print('if', x.usd_balance, x.bitcoin_balance )
             x.save()
-            usd_balance = x.usd_balance 
-            bitcoin_balance = x.bitcoin_balance
+            print('---\nChecking for insufficent funds...\n---', '\n*** Sale Approved! ***\n---',
+                  '\nBTC BALANCE (after sale): ',  x.bitcoin_balance, '\nUSD BALANCE (after sale): $',  x.usd_balance)
+            print("PORTFOLIO TOTAL (USD): $", round((float(bitcoin_balance) * bitcoin_price['USD']) + float(usd_balance), 2), '\n')
         else:
-            print('Insufficient Funds')
-            error = 'Insufficient funds. Please consult your doctor.'          
+            error = 'Insufficient funds... ***Sale Denied!***'
+            print('---\nChecking for insufficent funds...\n---\n',
+                  'Insufficient Funds...\n---\n ***Sale Denied!*** \n')
 
-    # Calculate the BTC/USD value
-    user_btc_balance = round(
-        (float(bitcoin_balance) * bitcoin_price['USD']), 2)
+    # Calculate the BTC (USD) Value
+    user_btc_balance = round((float(bitcoin_balance) * bitcoin_price['USD']), 2)
 
-    # Calculate the total porfolio balance
+    # Calculate the Portfolio Total (USD) Value
     portfolio_balance = round((user_btc_balance) + float(usd_balance), 2)
 
-
     return render(request, 'app1/pages/DASHBOARD.html',
-                    {'bitcoin_price': bitcoin_price,
-                    'usd_balance': usd_balance,
-                    'portfolio_balance': portfolio_balance,
-                    'user_btc_balance': user_btc_balance,
-                    'bitcoin_balance': bitcoin_balance,
-                    'symbol': symbol,
-                    'transaction_history': transaction_history,
-                    'error': error})
+                  {'bitcoin_price': bitcoin_price,
+                   'usd_balance': usd_balance,
+                   'portfolio_balance': portfolio_balance,
+                   'user_btc_balance': user_btc_balance,
+                   'bitcoin_balance': bitcoin_balance,
+                   'symbol': symbol,
+                   'transaction_history': transaction_history,
+                   'error': error})
 
 
 def quotes(request):
@@ -125,6 +132,7 @@ def quotes(request):
         'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + multi_coin + '&tsyms=USD')
     mc_symbol = json.loads(mc_request.content)
 
+    # Get Quotes
     if request.method == 'POST':
         quote = request.POST['quote']
         quote = quote.upper()
@@ -143,44 +151,3 @@ def crypto_news(request):
     news = json.loads(news_request.content)
     return render(request, 'app1/pages/crypto_news.html', {'news': news})
 
-
-
-
-
-"""
-        # Print Datetime
-        date = datetime.datetime.now()
-        print(datetime.datetime.now())
-
-        exchange_rate = bitcoin_price['USD']
-        print(exchange_rate)
-
-        # Get user info from the Database
-        usd_balance = request.user.account.usd_balance
-        print("---post save---\nusd balance: ", usd_balance)
-
-        bitcoin_balance = request.user.account.bitcoin_balance
-        print("bitcoin quantity", bitcoin_balance)
-
-        # Calculate the BTC/USD value
-        user_btc_balance = round(
-            (float(bitcoin_balance) * bitcoin_price['USD']), 2)
-        print("user btc balance: ", user_btc_balance)
-
-        # Calculate the total porfolio balance
-        portfolio_balance = round((user_btc_balance) + float(usd_balance), 2)
-        print("portfolio balance: ", portfolio_balance)
-
-        return render(request, 'app1/pages/DASHBOARD.html',
-                      {'bitcoin_price': bitcoin_price,
-                       'usd_balance': usd_balance,
-                       'portfolio_balance': portfolio_balance,
-                       'user_btc_balance': user_btc_balance,
-                       'buy_BTC': buy_BTC,
-                       'add_BTC': add_BTC,
-                       'usd_value': usd_value,
-                       'exchange_rate': exchange_rate,
-                       'date': date,
-                       'symbol': symbol,
-                       'error': error})
-"""

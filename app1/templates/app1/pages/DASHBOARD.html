@@ -6,6 +6,7 @@
 
 {% if user.is_authenticated %} 
 
+<!-- Time Series Chart-->
 {% block navbar %} 
 {% include './components/DASHBOARD_navbar.html' %} 
 {% endblock navbar %}
@@ -70,7 +71,7 @@
     <form class="form-inline" method="POST" action="{% url 'dashboard' %}">
       <div class="form-group mx-sm-3 mb-2">
         {% csrf_token %}
-        <select name="buy_sell" class="buy-sell">
+        <select name="BUY_SELL" class="buy-sell">
           <option value="BUY">BUY</option>
           <option value="SELL">SELL</option>
         </select>
@@ -80,13 +81,13 @@
           class="form-control"
           placeholder="BUY/SELL Amount..."
           aria-label="Search"
-          name="buy_BTC"
+          name="BUY_BTC"
         />
       </div>
       <button type="submit" class="btn btn-outline-secondary mb-2">
         Submit
       </button>
-      <div style="color:red">{{error}}</div>
+      <div class='container' style="color:red">{{error}}</div>
     </form>
   </div>
 </div>
@@ -96,8 +97,10 @@
 <table class="table table-bordered table-hover">
   <thead class="thead-light">
     <tr>
+      <th scope="col">Username</th>
       <th scope="col">Transaction Date</th>
       <th scope="col">Transaction Type</th>
+      <th scope="col">Symbol</th>
       <th scope="col">Quantity</th>
       <th scope="col">BTC Price (USD)</th>
       <th scope="col">Total (USD)</th>
@@ -107,10 +110,16 @@
   <tbody class="text-center">
     <tr>
       <td class="font-weight-bold">
+        {{transaction.user}}
+      </td>
+      <td class="font-weight-bold">
         {{transaction.transaction_date}}
       </td>
       <td class="font-weight-bold">
         {{transaction.transaction_type}}
+      </td>
+      <td class="font-weight-bold">
+        BTC
       </td>
       <td class="font-weight-bold">
         {{transaction.transaction_btc}}
@@ -119,7 +128,7 @@
         {{transaction.transaction_usd}}
       </td>
       <td class="font-weight-bold">
-        {{transaction.user}}
+        N/A
       </td>
     </tr>
   </tbody>
@@ -129,11 +138,10 @@
 
 {% else %}
 
+<!-- User Authentication Message -->
 <div class="container">
   {% block login_message %}
-  <p class="">
-    Please <a href="{% url 'login' %}" class="">Login </a>to view this content
-  </p>
+  <p>Please <a href="{% url 'login' %}" class="">Login </a>to view this content</p>
   {% endblock login_message %}
 </div>
 
