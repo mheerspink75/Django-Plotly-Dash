@@ -37,12 +37,6 @@ def DASHBOARD(request):
         'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD')
     bitcoin_price = json.loads(bitcoin_price_request.content)
 
-    # Get BTC Full Data
-    coins = 'BTC'
-    symbol_request = requests.get(
-        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
-    symbol = json.loads(symbol_request.content)
-
     # Get BTC and USD balance from db
     usd_balance = request.user.account.usd_balance
     bitcoin_balance = request.user.account.bitcoin_balance
@@ -54,7 +48,7 @@ def DASHBOARD(request):
     error = ''
 
     if request.method == "POST":
-        # Print BTC Existing Balance before sale
+        # Print BTC, USD and Portfolio Existing Balance
         print("---\nBTC BALANCE: ", bitcoin_balance)
         print("USD BALANCE: $", usd_balance)
         print("PORTFOLIO TOTAL (USD): $", round((float(bitcoin_balance) * bitcoin_price['USD']) + float(usd_balance), 2))
@@ -97,6 +91,7 @@ def DASHBOARD(request):
             print('---\nChecking for insufficent funds...\n---', '\n*** Sale Approved! ***\n---',
                   '\nBTC BALANCE (after sale): ',  x.bitcoin_balance, '\nUSD BALANCE (after sale): $',  x.usd_balance)
             print("PORTFOLIO TOTAL (USD): $", round((float(bitcoin_balance) * bitcoin_price['USD']) + float(usd_balance), 2), '\n')
+            return redirect(DASHBOARD)
         else:
             error = 'Insufficient funds... ***Sale Denied!***'
             print('---\nChecking for insufficent funds...\n---\n',
@@ -107,6 +102,11 @@ def DASHBOARD(request):
 
     # Calculate the Portfolio Total (USD) Value
     portfolio_balance = round((user_btc_balance) + float(usd_balance), 2)
+
+    # Get BTC Full Data
+    coins = 'BTC'
+    symbol_request = requests.get('https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
+    symbol = json.loads(symbol_request.content)
 
     return render(request, 'app1/pages/DASHBOARD.html',
                   {'bitcoin_price': bitcoin_price,
