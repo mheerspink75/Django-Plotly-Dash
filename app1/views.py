@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from .forms.forms import RegisterForm
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Account
+from django.contrib.auth.decorators import login_required
+
+from . import models
+from app1.models import Account, Transaction
 
 import datetime
 import requests
@@ -44,6 +47,9 @@ def DASHBOARD(request):
     usd_balance = request.user.account.usd_balance
     bitcoin_balance = request.user.account.bitcoin_balance
 
+    transaction_history = models.Transaction.objects.order_by('transaction_date')
+    print(transaction_history)
+
     error = ''
 
     if request.method == "POST":
@@ -56,9 +62,10 @@ def DASHBOARD(request):
 
         # BUY / SELL BTC Quantity
         buy_BTC = float(request.POST['buy_BTC'])
-        if buy_sell == 'sell':
+        if buy_sell == 'SELL':
             buy_BTC = buy_BTC * -1
         print("buy/sell btc quantity: ", buy_BTC)
+
 
         # USD Value of Purchase Amount
         usd_value = (buy_BTC * bitcoin_price['USD'])
@@ -83,6 +90,7 @@ def DASHBOARD(request):
             usd_balance = x.usd_balance 
             bitcoin_balance = x.bitcoin_balance
         else:
+            print('Insufficient Funds')
             error = 'Insufficient funds. Please consult your doctor.'          
 
     # Calculate the BTC/USD value
@@ -92,6 +100,7 @@ def DASHBOARD(request):
     # Calculate the total porfolio balance
     portfolio_balance = round((user_btc_balance) + float(usd_balance), 2)
 
+
     return render(request, 'app1/pages/DASHBOARD.html',
                     {'bitcoin_price': bitcoin_price,
                     'usd_balance': usd_balance,
@@ -99,6 +108,7 @@ def DASHBOARD(request):
                     'user_btc_balance': user_btc_balance,
                     'bitcoin_balance': bitcoin_balance,
                     'symbol': symbol,
+                    'transaction_history': transaction_history,
                     'error': error})
 
 

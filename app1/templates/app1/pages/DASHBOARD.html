@@ -64,15 +64,15 @@
 </table>
 
 
-<!-- Buy Transactions -->
+<!-- Buy/Sell Transactions -->
 <div class="row" style="margin-top: 1rem;">
   <div class="col">
     <form class="form-inline" method="POST" action="{% url 'dashboard' %}">
       <div class="form-group mx-sm-3 mb-2">
         {% csrf_token %}
         <select name="buy_sell" class="buy-sell">
-          <option value="buy">BUY</option>
-          <option value="sell">SELL</option>
+          <option value="BUY">BUY</option>
+          <option value="SELL">SELL</option>
         </select>
         <input
           type="number"
@@ -103,25 +103,27 @@
       <th scope="col">Total (USD)</th>
     </tr>
   </thead>
+  {% for transaction in transaction_history.all %}
   <tbody class="text-center">
     <tr>
       <td class="font-weight-bold">
-        {{date}}
+        {{transaction.transaction_date}}
       </td>
       <td class="font-weight-bold">
-        {{transaction_type}}
+        {{transaction.transaction_type}}
       </td>
       <td class="font-weight-bold">
-        {{buy_BTC}}
+        {{transaction.transaction_btc}}
       </td>
       <td class="font-weight-bold">
-        {{exchange_rate}}
+        {{transaction.transaction_usd}}
       </td>
       <td class="font-weight-bold">
-        {{usd_value}}
+        {{transaction.user}}
       </td>
     </tr>
   </tbody>
+  {% endfor %}
 </table>
 
 

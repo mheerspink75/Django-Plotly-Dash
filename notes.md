@@ -89,6 +89,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from app1.models import Account
 
+from app1.models import Transaction
+.
+
 User.objects.all()
 <QuerySet [<User: mattheerspink>, <User: mh1975>, <User: user5000>]>
 
@@ -131,10 +134,10 @@ Account.objects.count()
 
 Account.objects.values()
 
-User.objects.get(id=1).account.user.username
+User.objects.get(id=1).username
 
 
-
+Transaction.objects.get(pk=3).user.username
 
 
 ```
@@ -173,7 +176,7 @@ Need to do:
 
 5. Add chart update search results to symbol lookup.
 
-
+https://www.geeksforgeeks.org/python-relational-fields-in-django-models/
 
 https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
 https://docs.djangoproject.com/en/dev/topics/auth/customizing/#extending-the-existing-user-model
