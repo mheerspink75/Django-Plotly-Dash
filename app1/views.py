@@ -3,7 +3,7 @@ from .forms.forms import RegisterForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-
+from django.contrib.auth.models import User
 from django.db import models
 from app1.models import Account, Transactions
 
@@ -84,7 +84,8 @@ def DASHBOARD(request):
         x = request.user.account
         x.bitcoin_balance = UPDATE_BTC
         x.usd_balance = UPDATE_USD
-       
+
+        t = Transactions
         # Check for insufficient funds update db
         if x.usd_balance >= 0 and x.bitcoin_balance >= 0:
             x.transaction_usd_price = bitcoin_price['USD']
@@ -92,6 +93,7 @@ def DASHBOARD(request):
             x.transaction_date = timezone.datetime.now()
             x.transaction_btc_quantity = BUY_BTC
             x.transaction_total_usd_price = USD_SALE_PRICE
+            t.transaction_date = timezone.datetime.now()
             x.save()
             print('---\nChecking for insufficent funds...\n---', '\n*** Sale Approved! ***\n---',
                   '\nBTC BALANCE (after sale): ',  x.bitcoin_balance, '\nUSD BALANCE (after sale): $',  x.usd_balance)
@@ -108,9 +110,10 @@ def DASHBOARD(request):
     # Calculate the Portfolio Total (USD) Value
     portfolio_balance = round((user_btc_balance) + float(usd_balance), 2)
 
+    # Account Transactions Table
     account_transactions = request.user.account
-    transaction = Transactions.objects.order_by('transaction_date')
-
+    transaction = Transactions.objects.filter(user_id=request.user.id)
+    print(Transactions.objects.filter(user_id=request.user.id).first())
     return render(request, 'app1/pages/DASHBOARD.html',
                   {'bitcoin_price': bitcoin_price,
                    'account_transactions': account_transactions,
