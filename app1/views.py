@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
 from .forms.forms import RegisterForm
-from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
 from app1.models import Account, Transactions
-
 import requests
 import json
 
@@ -30,6 +28,7 @@ def register(response):
 def home(request):
     return render(request, 'app1/pages/index.html')
 
+@login_required
 def DASHBOARD(request):
     # Get BTC Price Data
     bitcoin_price_request = requests.get(
@@ -38,7 +37,8 @@ def DASHBOARD(request):
 
     # Get BTC Full Data
     coins = 'BTC'
-    symbol_request = requests.get('https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
+    symbol_request = requests.get(
+        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
     symbol = json.loads(symbol_request.content)
 
     # Get BTC and USD balance from db
@@ -51,7 +51,8 @@ def DASHBOARD(request):
         # Print BTC, USD and Portfolio Existing Balance
         print("---\nBTC BALANCE: ", bitcoin_balance)
         print("USD BALANCE: $", usd_balance)
-        print("PORTFOLIO TOTAL (USD): $", round((float(bitcoin_balance) * bitcoin_price['USD']) + float(usd_balance), 2))
+        print("PORTFOLIO TOTAL (USD): $", round(
+            (float(bitcoin_balance) * bitcoin_price['USD']) + float(usd_balance), 2))
 
         # Select BUY / SELL
         BUY_SELL = request.POST['BUY_SELL']
@@ -80,43 +81,60 @@ def DASHBOARD(request):
         UPDATE_USD = round(float(usd_balance) - (USD_SALE_PRICE), 2)
         print("UPDATE USD BALANCE: $", UPDATE_USD)
 
-        # Save to the Database
+        # Update the Database
         x = request.user.account
         x.bitcoin_balance = UPDATE_BTC
         x.usd_balance = UPDATE_USD
 
-        t = Transactions
-        # Check for insufficient funds update db
+        # Check for insufficient funds, create transaction table entry and save to the db
         if x.usd_balance >= 0 and x.bitcoin_balance >= 0:
-            x.transaction_usd_price = bitcoin_price['USD']
-            x.transaction_type = BUY_SELL
-            x.transaction_date = timezone.datetime.now()
-            x.transaction_btc_quantity = BUY_BTC
-            x.transaction_total_usd_price = USD_SALE_PRICE
-            t.transaction_date = timezone.datetime.now()
+            # Create Transaction Table Entry
+            if BUY_SELL == 'SELL':
+                Transactions.objects.create(user_id=request.user.id,
+                                            transaction_usd_price=bitcoin_price['USD'],
+                                            transaction_type=BUY_SELL, transaction_date=timezone.datetime.now(),
+                                            transaction_btc_quantity=BUY_BTC,
+                                            transaction_total_usd_price=(USD_SALE_PRICE * -1))
+            else:
+                Transactions.objects.create(user_id=request.user.id,
+                                            transaction_usd_price=bitcoin_price['USD'],
+                                            transaction_type=BUY_SELL, transaction_date=timezone.datetime.now(),
+                                            transaction_btc_quantity=BUY_BTC,
+                                            transaction_total_usd_price=(USD_SALE_PRICE * -1))
+
+
+            # Save Account Balance to db
             x.save()
-            print('---\nChecking for insufficent funds...\n---', '\n*** Sale Approved! ***\n---',
-                  '\nBTC BALANCE (after sale): ',  x.bitcoin_balance, '\nUSD BALANCE (after sale): $',  x.usd_balance)
-            print("PORTFOLIO TOTAL (USD): $", round((float(bitcoin_balance) * bitcoin_price['USD']) + float(usd_balance), 2), '\n')
+
+            print('---\nChecking for insufficent funds...\n---',
+                  '\n*** Sale Approved! ***\n---',
+                  '\nBTC BALANCE (after sale): ',
+                  x.bitcoin_balance,
+                  '\nUSD BALANCE (after sale): $',
+                  x.usd_balance)
+
+            print("PORTFOLIO TOTAL (USD): $",
+                  round((float(bitcoin_balance) * bitcoin_price['USD']) + float(usd_balance), 2), '\n')
+
             return redirect(DASHBOARD)
         else:
-            error = 'Insufficient funds... ***Sale Denied!***'
+            error = 'Insufficient funds... *** Sale Denied! ***'
+
             print('---\nChecking for insufficent funds...\n---\n',
                   'Insufficient Funds...\n---\n ***Sale Denied!*** \n')
 
-    # Calculate the BTC (USD) Value
-    user_btc_balance = round((float(bitcoin_balance) * bitcoin_price['USD']), 2)
+    # Calculate the USD value of the user's BTC
+    user_btc_balance = round(
+        (float(bitcoin_balance) * bitcoin_price['USD']), 2)
 
-    # Calculate the Portfolio Total (USD) Value
+    # Calculate the total portfolio balance in USD
     portfolio_balance = round((user_btc_balance) + float(usd_balance), 2)
 
-    # Account Transactions Table
-    account_transactions = request.user.account
-    transaction = Transactions.objects.filter(user_id=request.user.id)
-    print(Transactions.objects.filter(user_id=request.user.id).first())
+    # Display the transaction history of the logged in user
+    transaction = Transactions.objects.all().filter(user=request.user).order_by('transaction_date').reverse()
+
     return render(request, 'app1/pages/DASHBOARD.html',
                   {'bitcoin_price': bitcoin_price,
-                   'account_transactions': account_transactions,
                    'transaction': transaction,
                    'usd_balance': usd_balance,
                    'portfolio_balance': portfolio_balance,
@@ -157,11 +175,3 @@ def crypto_news(request):
         'https://min-api.cryptocompare.com/data/v2/news/?lang=EN')
     news = json.loads(news_request.content)
     return render(request, 'app1/pages/crypto_news.html', {'news': news})
-
-
-
-'''
-# Get transaction history from db
-transaction_history = models.Transaction.objects.order_by('transaction_date')
-print(transaction_history)
-'''

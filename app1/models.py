@@ -9,11 +9,6 @@ class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     usd_balance = models.DecimalField(max_digits=12, decimal_places=2, default=50000)
     bitcoin_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    transaction_type = models.CharField(max_length=5)
-    transaction_date = models.DateTimeField(default=timezone.datetime.now())
-    transaction_btc_quantity = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    transaction_usd_price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    transaction_total_usd_price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
 @receiver(post_save, sender=User)
 def create_user_account(sender, instance, created, **kwargs):
@@ -33,7 +28,7 @@ class Transactions(models.Model):
     transaction_usd_price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     transaction_total_usd_price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     def __str__(self):
-        return self.user.username
+        return (self.user.username)
 
 
 
