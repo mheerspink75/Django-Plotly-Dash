@@ -106,35 +106,32 @@
       <th scope="col">Total (USD)</th>
     </tr>
   </thead>
-  {% for transaction in transaction_history.all %}
   <tbody class="text-center">
     <tr>
       <td class="font-weight-bold">
-        {{transaction.user}}
+        {{account_transactions.user}}
       </td>
       <td class="font-weight-bold">
-        {{transaction.transaction_date}}
+        {{account_transactions.transaction_date}}
       </td>
       <td class="font-weight-bold">
-        {{transaction.transaction_type}}
+        {{account_transactions.transaction_type}}
       </td>
       <td class="font-weight-bold">
         BTC
       </td>
       <td class="font-weight-bold">
-        {{transaction.transaction_btc}}
+        {{account_transactions.transaction_btc_quantity}}
       </td>
       <td class="font-weight-bold">
-        {{transaction.transaction_usd}}
+        {{account_transactions.transaction_usd_price}}
       </td>
       <td class="font-weight-bold">
-        N/A
+        {{account_transactions.transaction_total_usd_price}}
       </td>
     </tr>
   </tbody>
-  {% endfor %}
 </table>
-
 
 {% else %}
 

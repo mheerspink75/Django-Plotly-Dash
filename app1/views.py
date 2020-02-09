@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 
 from . import models
-from app1.models import Account, Transaction
+from app1.models import Account
 
 import datetime
 import requests
@@ -37,13 +37,14 @@ def DASHBOARD(request):
         'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD')
     bitcoin_price = json.loads(bitcoin_price_request.content)
 
+    # Get BTC Full Data
+    coins = 'BTC'
+    symbol_request = requests.get('https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
+    symbol = json.loads(symbol_request.content)
+
     # Get BTC and USD balance from db
     usd_balance = request.user.account.usd_balance
     bitcoin_balance = request.user.account.bitcoin_balance
-
-    # Get transaction history from db
-    transaction_history = models.Transaction.objects.order_by('transaction_date')
-    print(transaction_history)
 
     error = ''
 
@@ -84,9 +85,14 @@ def DASHBOARD(request):
         x = request.user.account
         x.bitcoin_balance = UPDATE_BTC
         x.usd_balance = UPDATE_USD
-
+       
         # Check for insufficient funds update db
         if x.usd_balance >= 0 and x.bitcoin_balance >= 0:
+            x.transaction_usd_price = bitcoin_price['USD']
+            x.transaction_type = BUY_SELL
+            x.transaction_date = datetime.datetime.now()
+            x.transaction_btc_quantity = BUY_BTC
+            x.transaction_total_usd_price = USD_SALE_PRICE
             x.save()
             print('---\nChecking for insufficent funds...\n---', '\n*** Sale Approved! ***\n---',
                   '\nBTC BALANCE (after sale): ',  x.bitcoin_balance, '\nUSD BALANCE (after sale): $',  x.usd_balance)
@@ -103,19 +109,16 @@ def DASHBOARD(request):
     # Calculate the Portfolio Total (USD) Value
     portfolio_balance = round((user_btc_balance) + float(usd_balance), 2)
 
-    # Get BTC Full Data
-    coins = 'BTC'
-    symbol_request = requests.get('https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
-    symbol = json.loads(symbol_request.content)
+    account_transactions = request.user.account
 
     return render(request, 'app1/pages/DASHBOARD.html',
                   {'bitcoin_price': bitcoin_price,
+                   'account_transactions': account_transactions,
                    'usd_balance': usd_balance,
                    'portfolio_balance': portfolio_balance,
                    'user_btc_balance': user_btc_balance,
                    'bitcoin_balance': bitcoin_balance,
                    'symbol': symbol,
-                   'transaction_history': transaction_history,
                    'error': error})
 
 
@@ -151,3 +154,10 @@ def crypto_news(request):
     news = json.loads(news_request.content)
     return render(request, 'app1/pages/crypto_news.html', {'news': news})
 
+
+
+'''
+# Get transaction history from db
+transaction_history = models.Transaction.objects.order_by('transaction_date')
+print(transaction_history)
+'''
