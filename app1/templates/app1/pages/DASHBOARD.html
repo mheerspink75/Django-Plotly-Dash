@@ -93,7 +93,7 @@
 </div>
 
 
-<!-- Transaction Table -->
+<!-- Transaction Table (User One to One) -->
 <table class="table table-bordered table-hover">
   <thead class="thead-light">
     <tr>
@@ -132,6 +132,50 @@
     </tr>
   </tbody>
 </table>
+
+
+<!-- Transaction History Table (Foreign Key) -->
+<table class="table table-bordered table-hover">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Username</th>
+      <th scope="col">Transaction Date</th>
+      <th scope="col">Transaction Type</th>
+      <th scope="col">Symbol</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">BTC Price (USD)</th>
+      <th scope="col">Total (USD)</th>
+    </tr>
+  </thead>
+  {% for transactions in transaction.all %}
+  <tbody class="text-center">
+    <tr>
+      <td class="font-weight-bold">
+        {{transactions.user}}
+      </td>
+      <td class="font-weight-bold">
+        {{transactions.transaction_date}}
+      </td>
+      <td class="font-weight-bold">
+        {{transactions.transaction_type}}
+      </td>
+      <td class="font-weight-bold">
+        BTC
+      </td>
+      <td class="font-weight-bold">
+        {{transactions.transaction_btc_quantity}}
+      </td>
+      <td class="font-weight-bold">
+        {{transactions.transaction_usd_price}}
+      </td>
+      <td class="font-weight-bold">
+        {{transactions.transaction_total_usd_price}}
+      </td>
+    </tr>
+  </tbody>
+  {% endfor %}
+</table>
+{{transactions.first.user}}
 
 {% else %}
 

@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect
 from .forms.forms import RegisterForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
-from . import models
-from app1.models import Account
+from django.db import models
+from app1.models import Account, Transactions
 
-import datetime
 import requests
 import json
 
@@ -29,7 +29,6 @@ def register(response):
 #### Main Pages ####
 def home(request):
     return render(request, 'app1/pages/index.html')
-
 
 def DASHBOARD(request):
     # Get BTC Price Data
@@ -66,7 +65,7 @@ def DASHBOARD(request):
         else:
             print("BUY BTC Quantity: +", BUY_BTC)
 
-        # USD Value of Purchase
+        # USD Value of Sale
         USD_SALE_PRICE = (BUY_BTC * bitcoin_price['USD'])
         if BUY_SELL == 'SELL':
             print("SELL BTC (USD PRICE): + $", (USD_SALE_PRICE * -1))
@@ -90,7 +89,7 @@ def DASHBOARD(request):
         if x.usd_balance >= 0 and x.bitcoin_balance >= 0:
             x.transaction_usd_price = bitcoin_price['USD']
             x.transaction_type = BUY_SELL
-            x.transaction_date = datetime.datetime.now()
+            x.transaction_date = timezone.datetime.now()
             x.transaction_btc_quantity = BUY_BTC
             x.transaction_total_usd_price = USD_SALE_PRICE
             x.save()
@@ -110,10 +109,12 @@ def DASHBOARD(request):
     portfolio_balance = round((user_btc_balance) + float(usd_balance), 2)
 
     account_transactions = request.user.account
+    transaction = Transactions.objects.order_by('transaction_date')
 
     return render(request, 'app1/pages/DASHBOARD.html',
                   {'bitcoin_price': bitcoin_price,
                    'account_transactions': account_transactions,
+                   'transaction': transaction,
                    'usd_balance': usd_balance,
                    'portfolio_balance': portfolio_balance,
                    'user_btc_balance': user_btc_balance,
