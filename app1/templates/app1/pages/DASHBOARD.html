@@ -50,7 +50,7 @@
     <tr>
       <td>
         <h1>
-        {{bitcoin_balance}} BTC
+          {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}}{{bitcoin_balance}}
         </h1>
       </td>
       <td class="text-center">
@@ -69,7 +69,7 @@
     <tr>
       <td class='text-right'>
         <strong>
-          {{bitcoin_balance}} BTC
+          {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}}{{bitcoin_balance}}
         </strong> / ${{user_btc_balance}}
       </td>
       <td class='text-center'>
@@ -117,7 +117,7 @@
       <td class="text-left">
         <strong>
           ${{usd_balance}}
-        </strong> + {{bitcoin_balance}} BTC = 
+        </strong> + {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}}{{bitcoin_balance}} = 
         <strong>
           ${{portfolio_balance}}
         </strong>
@@ -162,11 +162,9 @@
         <td class="font-weight-bold">
           {{transactions.transaction_type}}
         </td>
-  
         <td class="font-weight-bold">
           {{transactions.transaction_btc_quantity}}
         </td>
-  
         <td class="font-weight-bold">
           ${{transactions.transaction_total_usd_price}}
         </td>

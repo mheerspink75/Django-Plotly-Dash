@@ -9,7 +9,6 @@ import requests
 import json
 
 from app1.dashapps import crypto_charts2
-from app1.dashapps import stock_charts2
 
 
 #### Registration/Login #####
@@ -28,6 +27,7 @@ def register(response):
 def home(request):
     return render(request, 'app1/pages/index.html')
 
+
 @login_required
 def DASHBOARD(request):
     # Get BTC Price Data
@@ -42,8 +42,8 @@ def DASHBOARD(request):
     symbol = json.loads(symbol_request.content)
 
     # Get BTC and USD balance from db
-    usd_balance = request.user.account.usd_balance
-    bitcoin_balance = request.user.account.bitcoin_balance
+    usd_balance = float(request.user.account.usd_balance)
+    bitcoin_balance = float(request.user.account.bitcoin_balance)
 
     error = ''
 
@@ -52,7 +52,7 @@ def DASHBOARD(request):
         print("---\nBTC BALANCE: ", bitcoin_balance)
         print("USD BALANCE: $", usd_balance)
         print("PORTFOLIO TOTAL (USD): $", round(
-            (float(bitcoin_balance) * bitcoin_price['USD']) + float(usd_balance), 2))
+            (bitcoin_balance * bitcoin_price['USD']) + usd_balance, 2))
 
         # Select BUY / SELL
         BUY_SELL = request.POST['BUY_SELL']
@@ -74,11 +74,11 @@ def DASHBOARD(request):
             print("BUY BTC (USD PRICE): - $", USD_SALE_PRICE)
 
         # Update BTC Balance
-        UPDATE_BTC = round(BUY_BTC + float(bitcoin_balance), 2)
+        UPDATE_BTC = round(BUY_BTC + bitcoin_balance, 2)
         print("---\nUPDATE BTC BALANCE : ", UPDATE_BTC)
 
         # Update USD Balance
-        UPDATE_USD = round(float(usd_balance) - (USD_SALE_PRICE), 2)
+        UPDATE_USD = round(usd_balance - USD_SALE_PRICE, 2)
         print("UPDATE USD BALANCE: $", UPDATE_USD)
 
         # Update the Database
@@ -106,21 +106,20 @@ def DASHBOARD(request):
                   x.usd_balance)
 
             print("PORTFOLIO TOTAL (USD): $",
-                  round((float(bitcoin_balance) * bitcoin_price['USD']) + float(usd_balance), 2), '\n')
+                  round((bitcoin_balance * bitcoin_price['USD']) + usd_balance, 2), '\n')
 
             return redirect(DASHBOARD)
         else:
-            error = 'Insufficient funds... *** Sale Denied! ***'
+            error = 'Insufficient funds...\n  *** Sale Denied! ***'
 
             print('---\nChecking for insufficent funds...\n---\n',
                   'Insufficient Funds...\n---\n ***Sale Denied!*** \n')
 
     # Calculate the USD value of the user's BTC
-    user_btc_balance = round(
-        (float(bitcoin_balance) * bitcoin_price['USD']), 2)
+    user_btc_balance = round((bitcoin_balance * bitcoin_price['USD']), 2)
 
     # Calculate the total portfolio balance in USD
-    portfolio_balance = round((user_btc_balance) + float(usd_balance), 2)
+    portfolio_balance = round(user_btc_balance + usd_balance, 2)
 
     # Display the transaction history of the logged in user
     transaction = Transactions.objects.all().filter(user=request.user).order_by('transaction_date').reverse()

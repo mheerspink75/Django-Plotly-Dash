@@ -24,7 +24,7 @@ datatype = 'csv'  # ['json', 'csv']
 
 def get_daily_crypto(symbol):
     daily = 'DIGITAL_CURRENCY_DAILY'
-    #print('Currently pulling: ', symbol, daily)
+    print('Currently pulling: ', symbol, daily)
 
     CRYPTO_DAILY_OHLC = ('https://www.alphavantage.co/query?') + ('function=' + daily) + \
         ('&symbol=' + symbol) + ('&market=' + market) + \
