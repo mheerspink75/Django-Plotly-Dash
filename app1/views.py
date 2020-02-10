@@ -89,21 +89,13 @@ def DASHBOARD(request):
         # Check for insufficient funds, create transaction table entry and save to the db
         if x.usd_balance >= 0 and x.bitcoin_balance >= 0:
             # Create Transaction Table Entry
-            if BUY_SELL == 'SELL':
-                Transactions.objects.create(user_id=request.user.id,
-                                            transaction_usd_price=bitcoin_price['USD'],
-                                            transaction_type=BUY_SELL, transaction_date=timezone.datetime.now(),
-                                            transaction_btc_quantity=BUY_BTC,
-                                            transaction_total_usd_price=(USD_SALE_PRICE * -1))
-            else:
-                Transactions.objects.create(user_id=request.user.id,
-                                            transaction_usd_price=bitcoin_price['USD'],
-                                            transaction_type=BUY_SELL, transaction_date=timezone.datetime.now(),
-                                            transaction_btc_quantity=BUY_BTC,
-                                            transaction_total_usd_price=(USD_SALE_PRICE * -1))
+            Transactions.objects.create(user_id=request.user.id,
+                                        transaction_usd_price=bitcoin_price['USD'],
+                                        transaction_type=BUY_SELL, transaction_date=timezone.datetime.now(),
+                                        transaction_btc_quantity=BUY_BTC,
+                                        transaction_total_usd_price=(USD_SALE_PRICE * -1))
 
-
-            # Save Account Balance to db
+            # Save Account Balances to db
             x.save()
 
             print('---\nChecking for insufficent funds...\n---',
