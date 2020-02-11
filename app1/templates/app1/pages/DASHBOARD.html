@@ -11,30 +11,7 @@
 {% include './components/DASHBOARD_navbar.html' %} 
 {% endblock navbar %}
 
-<div class="container-fluid">
-<!-- BTC Table -->
-<table class="table table-bordered table-hover">
-  <thead class="thead-light">
-    <tr>
-      <th scope="col">Currency</th>
-      <th scope="col">Price</th>
-      <th scope="col">24hr High</th>
-      <th scope="col">24hr Low</th>
-      <th scope="col">Market Cap</th>
-    </tr>
-  </thead>
-  <tbody class="text-left">
-    {% for key,value in symbol.DISPLAY.items %}
-    <tr>
-      <td class="font-weight-bold text-center">{{key}}</td>
-      <td class="font-weight-bold text-center">{{value.USD.PRICE}}</td>
-      <td>{{value.USD.HIGHDAY}}</td>
-      <td>{{value.USD.LOWDAY}}</td>
-      <td>{{value.USD.MKTCAP}}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+
 
 
 <!-- Portfolio Table -->
@@ -70,49 +47,13 @@
       <td class='text-right'>
         <strong>
           {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}}{{bitcoin_balance}}
-        </strong> / ${{user_btc_balance}}
+        </strong> = ${{user_btc_balance}}
       </td>
       <td class='text-center'>
-        <!-- Buy/Sell Transactions -->
-        <div class="container">
-          <div class="row">
-          <div class="col">
-            <form class="form-inline" method="POST" action="{% url 'dashboard' %}">
-              <div class="form-group mx-sm-3 mb-2">
-                {% csrf_token %}
-                <div class="input-group mb-3">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                    <label class="form-check-label" for="inlineRadio1">Trade BTC</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                    <label class="form-check-label" for="inlineRadio2">Trade USD</label>
-                  </div>
-                  <div class="input-group-prepend">
-                    <select name="BUY_SELL" class="buy-sell form-control">
-                      <option value="BUY">BUY</option>
-                      <option value="SELL">SELL</option>
-                    </select>
-                  </div>
-                  <input
-                  type=number 
-                  step=0.01 
-                  required="required"
-                  placeholder="BTC Amount..."
-                  aria-label="Search"
-                  name="BUY_BTC"
-                />
-                <div class="input-group-append">
-                  <button type="submit" class="btn btn-outline-secondary">
-                    Submit
-                  </button>
-                </div>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+        <strong>
+          <div class='container' style="color:red"><p>{{error}}</p></div>
+        </strong>
+        {{btc_percentage}}% BTC / {{usd_percentage}}% USD
       </td>
       <td class="text-left">
         <strong>
@@ -121,14 +62,73 @@
         <strong>
           ${{portfolio_balance}}
         </strong>
-        <div class='container' style="color:red">
-        <p>{{error}}<p>
         </div>
       </td>
     </tr>
   </tbody>
 </table>
 
+
+<!-- BUY/SELL Interface -->
+<form class="form-inline" method="POST" action="{% url 'dashboard' %}">
+  <div class="form-group mx-sm-3 mb-2">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="TRADE_BTC" checked="checked">
+        <label class="form-check-label" for="inlineRadio1">Trade BTC</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="TRADE_USD">
+        <label class="form-check-label" for="inlineRadio2">Trade USD</label>
+      </div>
+      <div class="input-group-prepend">
+        <select name="BUY_SELL" class="buy-sell form-control">
+          <option value="BUY">BUY</option>
+          <option value="SELL">SELL</option>
+        </select>
+      </div>
+      <input
+      type=number 
+      step=0.01 
+      required="required"
+      placeholder="BTC Amount..."
+      aria-label="Search"
+      name="BUY_BTC"
+    />
+    <div class="input-group-append">
+      <button type="submit" class="btn btn-outline-secondary">
+        Submit
+      </button>
+    </div>
+    </div>
+  </div>
+</form>
+
+
+  <!-- BTC Table -->
+  <table class="table table-bordered table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Currency</th>
+        <th scope="col">Price</th>
+        <th scope="col">24hr High</th>
+        <th scope="col">24hr Low</th>
+        <th scope="col">Market Cap</th>
+      </tr>
+    </thead>
+    <tbody class="text-left">
+      {% for key,value in symbol.DISPLAY.items %}
+      <tr>
+        <td class="font-weight-bold text-center">{{key}}</td>
+        <td class="font-weight-bold text-center">{{value.USD.PRICE}}</td>
+        <td>{{value.USD.HIGHDAY}}</td>
+        <td>{{value.USD.LOWDAY}}</td>
+        <td>{{value.USD.MKTCAP}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 <!-- Transaction History Table (Foreign Key) -->
 <div class="table-responsive-sm">
@@ -174,7 +174,6 @@
   </table>
 </div>
 
-</div>
 {% else %}
 
 <!-- User Authentication Message -->

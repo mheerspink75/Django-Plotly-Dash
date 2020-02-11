@@ -8,8 +8,6 @@ from app1.models import Account, Transactions
 import requests
 import json
 
-from app1.dashapps import crypto_charts2
-
 
 #### Registration/Login #####
 def register(response):
@@ -27,6 +25,19 @@ def register(response):
 def home(request):
     return render(request, 'app1/pages/index.html')
 
+"""
+def DASHBOARD(request)
+    if request.method == "POST":
+        insert_order(request)
+    else: # request.method is "GET".
+        nav_data = prepare_navigation_menu_data(request)
+        balance_data = prepare_render_balance_data(request)
+        order_form_data = prepare_render_order_form_data(request)
+        transaction_history_data = prepare_render_transaction_history_data(request)
+        return render(request, 'template_url.html', {"menu_items": nav_data.menu_items, "balance_data": balance_data, ...})
+
+        for item in nav_data.menu_items:
+"""
 
 @login_required
 def DASHBOARD(request):
@@ -54,24 +65,30 @@ def DASHBOARD(request):
         print("PORTFOLIO TOTAL (USD): $", round(
             (bitcoin_balance * bitcoin_price['USD']) + usd_balance, 2))
 
-        # Select BUY / SELL
-        BUY_SELL = request.POST['BUY_SELL']
-        print('---\nBUY/SELL BTC: ', BUY_SELL)
+        # Enable TRADE
+        inlineRadioOptions = request.POST['inlineRadioOptions']
+        print('---\nTRADE BTC: ', inlineRadioOptions)
 
-        # BUY / SELL BTC Quantity
-        BUY_BTC = float(request.POST['BUY_BTC'])
-        if BUY_SELL == 'SELL':
-            BUY_BTC = BUY_BTC * -1
-            print("SELL BTC Quantity: ", BUY_BTC)
-        else:
-            print("BUY BTC Quantity: +", BUY_BTC)
+        if inlineRadioOptions == 'TRADE_BTC':
+            # Select BUY / SELL
+            BUY_SELL = request.POST['BUY_SELL']
+            print('---\nBUY/SELL BTC: ', BUY_SELL)
 
-        # USD Value of Sale
-        USD_SALE_PRICE = (BUY_BTC * bitcoin_price['USD'])
-        if BUY_SELL == 'SELL':
-            print("SELL BTC (USD PRICE): + $", (USD_SALE_PRICE * -1))
-        else:
-            print("BUY BTC (USD PRICE): - $", USD_SALE_PRICE)
+            # BUY / SELL BTC Quantity
+            BUY_BTC = float(request.POST['BUY_BTC'])
+
+            if BUY_SELL == 'SELL':
+                BUY_BTC = BUY_BTC * -1
+                print("SELL BTC Quantity: ", BUY_BTC)
+            else:
+                print("BUY BTC Quantity: +", BUY_BTC)
+
+            # USD Value of Sale
+            USD_SALE_PRICE = (BUY_BTC * bitcoin_price['USD'])
+            if BUY_SELL == 'SELL':
+                print("SELL BTC (USD PRICE): + $", (USD_SALE_PRICE * -1))
+            else:
+                print("BUY BTC (USD PRICE): - $", USD_SALE_PRICE)
 
         # Update BTC Balance
         UPDATE_BTC = round(BUY_BTC + bitcoin_balance, 2)
@@ -121,6 +138,14 @@ def DASHBOARD(request):
     # Calculate the total portfolio balance in USD
     portfolio_balance = round(user_btc_balance + usd_balance, 2)
 
+    # Calculate the percantage of the portfolio invested in BTC
+    btc_percentage = round((user_btc_balance / portfolio_balance) * 100, 2)
+    print('PORTFOLIO BTC PERCENTAGE: ', btc_percentage, '%')
+
+    # Calculate the USD percantage of the portfolio 
+    usd_percentage = round((usd_balance / portfolio_balance) * 100, 2)
+    print('PORTFOLIO USD PERCENTAGE: ', usd_percentage, '%')
+
     # Display the transaction history of the logged in user
     transaction = Transactions.objects.all().filter(user=request.user).order_by('transaction_date').reverse()
 
@@ -131,11 +156,14 @@ def DASHBOARD(request):
                    'portfolio_balance': portfolio_balance,
                    'user_btc_balance': user_btc_balance,
                    'bitcoin_balance': bitcoin_balance,
+                   'btc_percentage': btc_percentage,
+                   'usd_percentage': usd_percentage,
                    'symbol': symbol,
                    'error': error})
 
 
 def quotes(request):
+    from app1.dashapps import crypto_charts2
     # Get BTC Full Data
     coins = 'BTC'
     symbol_request = requests.get(

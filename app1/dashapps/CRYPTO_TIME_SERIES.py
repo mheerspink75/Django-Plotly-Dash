@@ -60,7 +60,7 @@ minute_time_series = pd.read_csv('https://min-api.cryptocompare.com/data/histo/m
 #print(minute_time_series)
 
 ####################################
-print(get_daily_crypto(symbol))###
+#print(get_daily_crypto(symbol))###
 ##print(get_weekly_crypto(symbol))##
 ##print(get_monthly_crypto(symbol))#
 ####################################
