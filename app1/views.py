@@ -59,78 +59,53 @@ def DASHBOARD(request):
     error = ''
 
     if request.method == "POST":
-        # Print BTC, USD and Portfolio Existing Balance
-        print("---\nBTC BALANCE: ", bitcoin_balance)
-        print("USD BALANCE: $", usd_balance)
-        print("PORTFOLIO TOTAL (USD): $", round(
-            (bitcoin_balance * bitcoin_price['USD']) + usd_balance, 2))
-
-        # Enable TRADE
+        # Radio Options Trade BTC / USD
         inlineRadioOptions = request.POST['inlineRadioOptions']
-        print('---\nTRADE BTC: ', inlineRadioOptions)
+        # Select BUY / SELL
+        BUY_SELL = request.POST['BUY_SELL']
+        # Input BUY / SELL Amount
+        BUY_BTC = float(request.POST['BUY_BTC'])
 
+        # Calculate BTC Trade
         if inlineRadioOptions == 'TRADE_BTC':
-            # Select BUY / SELL
-            BUY_SELL = request.POST['BUY_SELL']
-            print('---\nBUY/SELL BTC: ', BUY_SELL)
-
-            # BUY / SELL BTC Quantity
-            BUY_BTC = float(request.POST['BUY_BTC'])
-
             if BUY_SELL == 'SELL':
                 BUY_BTC = BUY_BTC * -1
-                print("SELL BTC Quantity: ", BUY_BTC)
-            else:
-                print("BUY BTC Quantity: +", BUY_BTC)
-
             # USD Value of Sale
             USD_SALE_PRICE = (BUY_BTC * bitcoin_price['USD'])
-            if BUY_SELL == 'SELL':
-                print("SELL BTC (USD PRICE): + $", (USD_SALE_PRICE * -1))
-            else:
-                print("BUY BTC (USD PRICE): - $", USD_SALE_PRICE)
+            # Update BTC Balance
+            UPDATE_BTC = round(BUY_BTC + bitcoin_balance, 2)
+            # Update USD Balance
+            UPDATE_USD = round(usd_balance - USD_SALE_PRICE, 2)
 
-        # Update BTC Balance
-        UPDATE_BTC = round(BUY_BTC + bitcoin_balance, 2)
-        print("---\nUPDATE BTC BALANCE : ", UPDATE_BTC)
-
-        # Update USD Balance
-        UPDATE_USD = round(usd_balance - USD_SALE_PRICE, 2)
-        print("UPDATE USD BALANCE: $", UPDATE_USD)
+        # Calculate USD Trade
+        if inlineRadioOptions == 'TRADE_USD':
+            if BUY_SELL == 'BUY':
+                BUY_BTC = BUY_BTC * -1
+            # Update USD Balance
+            UPDATE_USD = round(BUY_BTC + usd_balance, 2)
+            # Update BTC Balance
+            USD_SALE_PRICE = BUY_BTC * -1
+            BUY_BTC = round((USD_SALE_PRICE / bitcoin_price['USD']), 2)
+            UPDATE_BTC = BUY_BTC + bitcoin_balance
 
         # Update the Database
         x = request.user.account
         x.bitcoin_balance = UPDATE_BTC
         x.usd_balance = UPDATE_USD
 
-        # Check for insufficient funds, create transaction table entry and save to the db
-        if x.usd_balance >= 0 and x.bitcoin_balance >= 0:
+        # Check for insufficient funds
+        if x.usd_balance >= 0 and x.bitcoin_balance >= .001:
             # Create Transaction Table Entry
             Transactions.objects.create(user_id=request.user.id,
                                         transaction_usd_price=bitcoin_price['USD'],
                                         transaction_type=BUY_SELL, transaction_date=timezone.datetime.now(),
                                         transaction_btc_quantity=BUY_BTC,
                                         transaction_total_usd_price=(USD_SALE_PRICE * -1))
-
             # Save Account Balances to db
             x.save()
-
-            print('---\nChecking for insufficent funds...\n---',
-                  '\n*** Sale Approved! ***\n---',
-                  '\nBTC BALANCE (after sale): ',
-                  x.bitcoin_balance,
-                  '\nUSD BALANCE (after sale): $',
-                  x.usd_balance)
-
-            print("PORTFOLIO TOTAL (USD): $",
-                  round((bitcoin_balance * bitcoin_price['USD']) + usd_balance, 2), '\n')
-
             return redirect(DASHBOARD)
         else:
             error = 'Insufficient funds...\n  *** Sale Denied! ***'
-
-            print('---\nChecking for insufficent funds...\n---\n',
-                  'Insufficient Funds...\n---\n ***Sale Denied!*** \n')
 
     # Calculate the USD value of the user's BTC
     user_btc_balance = round((bitcoin_balance * bitcoin_price['USD']), 2)
@@ -138,13 +113,9 @@ def DASHBOARD(request):
     # Calculate the total portfolio balance in USD
     portfolio_balance = round(user_btc_balance + usd_balance, 2)
 
-    # Calculate the percantage of the portfolio invested in BTC
+    # Calculate the percantage of the portfolio invested
     btc_percentage = round((user_btc_balance / portfolio_balance) * 100, 2)
-    print('PORTFOLIO BTC PERCENTAGE: ', btc_percentage, '%')
-
-    # Calculate the USD percantage of the portfolio 
     usd_percentage = round((usd_balance / portfolio_balance) * 100, 2)
-    print('PORTFOLIO USD PERCENTAGE: ', usd_percentage, '%')
 
     # Display the transaction history of the logged in user
     transaction = Transactions.objects.all().filter(user=request.user).order_by('transaction_date').reverse()
@@ -170,12 +141,6 @@ def quotes(request):
         'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + coins + '&tsyms=USD')
     symbol = json.loads(symbol_request.content)
 
-    # Get Multiple Currency Full Data
-    multi_coin = 'BTC,ETH,BCH,ETC,XRP,BSV,EOS,LTC,TRX,OKB,BNB,DASH'
-    mc_request = requests.get(
-        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + multi_coin + '&tsyms=USD')
-    mc_symbol = json.loads(mc_request.content)
-
     # Get Quotes
     if request.method == 'POST':
         quote = request.POST['quote']
@@ -185,6 +150,13 @@ def quotes(request):
         crypto = json.loads(crypto_request.content)
     else:
         crypto = symbol
+
+    # Get Multiple Currency Full Data
+    multi_coin = 'BTC,ETH,BCH,ETC,XRP,BSV,EOS,LTC,TRX,OKB,BNB,DASH'
+    mc_request = requests.get(
+        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + multi_coin + '&tsyms=USD')
+    mc_symbol = json.loads(mc_request.content)
+
     return render(request, 'app1/pages/quotes.html', {'crypto': crypto, 'mc_symbol': mc_symbol})
 
 
