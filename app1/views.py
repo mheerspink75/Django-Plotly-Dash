@@ -3,7 +3,6 @@ from .forms.forms import RegisterForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib.auth.models import User
-from django.db import models
 from app1.models import Account, Transactions
 import requests
 import json
@@ -72,7 +71,7 @@ def DASHBOARD(request):
                 BUY_BTC = BUY_BTC * -1
             # USD Value of Sale
             USD_SALE_PRICE = (BUY_BTC * bitcoin_price['USD'])
-            # Update BTC Balance
+            # Update BTC Balance Quantity
             UPDATE_BTC = round(BUY_BTC + bitcoin_balance, 2)
             # Update USD Balance
             UPDATE_USD = round(usd_balance - USD_SALE_PRICE, 2)
@@ -81,11 +80,13 @@ def DASHBOARD(request):
         if inlineRadioOptions == 'TRADE_USD':
             if BUY_SELL == 'BUY':
                 BUY_BTC = BUY_BTC * -1
+            # USD Value of sale
+            USD_SALE_PRICE = BUY_BTC * -1
             # Update USD Balance
             UPDATE_USD = round(BUY_BTC + usd_balance, 2)
-            # Update BTC Balance
-            USD_SALE_PRICE = BUY_BTC * -1
+            # Calculate the BTC Quantity
             BUY_BTC = round((USD_SALE_PRICE / bitcoin_price['USD']), 2)
+            # Update BTC Balance Quantity
             UPDATE_BTC = BUY_BTC + bitcoin_balance
 
         # Update the Database
@@ -94,7 +95,7 @@ def DASHBOARD(request):
         x.usd_balance = UPDATE_USD
 
         # Check for insufficient funds
-        if x.usd_balance >= 0 and x.bitcoin_balance >= .001:
+        if x.usd_balance >= 0 and x.bitcoin_balance >= 0:
             # Create Transaction Table Entry
             Transactions.objects.create(user_id=request.user.id,
                                         transaction_usd_price=bitcoin_price['USD'],
