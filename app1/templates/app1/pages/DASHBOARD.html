@@ -15,12 +15,57 @@
 
 <div class="container">
 
-  <!-- BTC Table -->
+  <!-- Portfolio Table -->
+<div class="table-responsive-sm">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col" class="h4">Portfolio Total</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr>
+        <td class="h1">
+              ${{portfolio_balance}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+<!-- BTC/USD Table -->
+<div class="table-responsive-sm">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col" class="text-left">BTC ({{btc_percentage}}%) </th>
+        <th scope="col" class="text-right">USD ({{usd_percentage}}%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class='h2 text-center'>
+          {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}} {{bitcoin_balance}}
+        </td>
+        <td class="h1 text-center" rowspan="2">
+            ${{usd_balance}}
+        </td>
+      </tr>
+      <tr>
+        <td class='h4 text-right'>
+          ${{user_btc_balance}}*
+      </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- BTC API Table -->
   <div class="table-responsive-md">
     <table class="table table-sm">
-      <thead class="">
+      <thead>
         <tr>
-          <th scope="col"> BTC Price (USD)</th>
+          <th scope="col" class="h5"> BTC Price</th>
           <th scope="col">24hr High</th>
           <th scope="col">24hr Low</th>
         </tr>
@@ -28,7 +73,7 @@
       <tbody class="text-left">
         {% for key,value in symbol.DISPLAY.items %}
         <tr>
-          <td class="h2">{{value.USD.PRICE}}</td>
+          <td class="h2 text-center">{{value.USD.PRICE}}*</td>
           <td>{{value.USD.HIGHDAY}}</td>
           <td>{{value.USD.LOWDAY}}</td>
         </tr>
@@ -37,46 +82,9 @@
     </table>
   </div>
 
-
-<!-- Portfolio Table -->
-<div class="table-responsive-sm">
-  <table class="table table-sm">
-    <thead class="">
-      <tr>
-        <th scope="col">BTC ({{btc_percentage}}%) </th>
-        <th scope="col">USD ({{usd_percentage}}%)</th>
-        <th scope="col">Portfolio Total</th>
-      </tr>
-    </thead>
-    <tbody class="text-center">
-      <tr>
-        <td class='h3'>
-          {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}}{{bitcoin_balance}}
-        </td>
-        <td class="text-center h3">
-            ${{usd_balance}}
-        </td>
-        <td class="text-center h2">
-              ${{portfolio_balance}}
-        </td>
-      </tr>
-      <tr>
-        <td class='h5 text-center' colspan="2">
-            {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}}{{bitcoin_balance}} =
-            ${{user_btc_balance}}
-        </td>
-        <td class="h6 text-center">
-            ${{usd_balance}} +
-            {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}}{{bitcoin_balance}}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  </div>
-
   <!-- BUY/SELL Interface -->
   <div class="container">
-    <form class="form-inline" method="POST" action="{% url 'dashboard' %}" style=''>
+    <form class="form-inline" method="POST" action="{% url 'dashboard' %}" style='display:flex; justify-content:center'>
       <div class="form-group mx-sm-3 mb-2">
         {% csrf_token %}
         <div class="input-group input-group-sm mb-3">
@@ -86,7 +94,7 @@
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="TRADE_USD">
-            <label class="form-check-label" for="inlineRadio2">Trade USD</label>
+            <label class="form-check-label" for="inlineRadio2">Trade USD*</label>
           </div>
           <div class="input-group-prepend">
             <select name="BUY_SELL" class="buy-sell form-control custom-select">
@@ -95,8 +103,9 @@
             </select>
           </div>
           <input
-          type=number 
-          step=0.01 
+          class="input-sm"
+          type="number" 
+          step="0.01" 
           required="required"
           placeholder="Trade Amount..."
           aria-label="Search"
@@ -117,7 +126,29 @@
   <div class="h5" style="text-decoration: red;">
     {{error}}
   </div>
+
   
+  <!-- Portfolio Table -->
+<div class="table-responsive-sm">
+  <table class="table table-sm">
+    <thead class="text-right">
+      <tr>
+        <th scope="col" class="text-left">BTC ({{btc_percentage}}%) </th>
+        <th scope="col">USD ({{usd_percentage}}%)</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr>
+        <td class='h4 text-center'>
+          {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}} {{bitcoin_balance}}
+        </td>
+        <td class="text-center h4">
+            ${{usd_balance}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
 
   <!-- Transaction History Table (Foreign Key) -->
   <div class="container-sm">
