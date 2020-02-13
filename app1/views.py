@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from app1.models import Account, Transactions
 import requests
 import json
+
 from app1.dashapps.crypto_compare import get_btc, symbol
 from app1.dashapps import crypto_charts2
 
@@ -35,7 +36,6 @@ def DASHBOARD(request):
 
     # Get BTC Price
     bitcoin_price = float(get_btc())
-    print(bitcoin_price)
 
     # Error messages
     error = ''
@@ -103,15 +103,23 @@ def DASHBOARD(request):
         transaction = Transactions.objects.all().filter(
             user=request.user).order_by('transaction_date').reverse()
 
-        update.x = {'usd_balance': usd_balance,
+        # Insert Commas into display items
+        btc_price = '{:,.2f}'.format(bitcoin_price)
+        user_usd_balance = '{:,.2f}'.format(usd_balance)
+        user_btc_balance = '{:,.2f}'.format(user_btc_balance)
+        portfolio_balance = '{:,.2f}'.format(portfolio_balance)
+        
+
+        update.x = {'user_usd_balance': user_usd_balance,
                     'bitcoin_balance': bitcoin_balance,
-                    'bitcoin_price': bitcoin_price,
+                    'btc_price': btc_price,
                     'user_btc_balance': user_btc_balance,
                     'portfolio_balance': portfolio_balance,
                     'btc_percentage': btc_percentage,
                     'usd_percentage': usd_percentage,
                     'transaction': transaction,
                     'symbol': symbol}
+        
                     
         return update.x
 
