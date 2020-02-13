@@ -26,7 +26,7 @@
     <tbody class="text-center">
       <tr>
         <td class="h1">
-              ${{portfolio_balance}}
+              ${{update.portfolio_balance}}
         </td>
       </tr>
     </tbody>
@@ -38,22 +38,22 @@
   <table class="table table-sm">
     <thead>
       <tr>
-        <th scope="col" class="text-left">BTC ({{btc_percentage}}%) </th>
-        <th scope="col" class="text-right">USD ({{usd_percentage}}%)</th>
+        <th scope="col" class="text-left">BTC ({{update.btc_percentage}}%) </th>
+        <th scope="col" class="text-right">USD ({{update.usd_percentage}}%)</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td class='h2 text-center'>
-          {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}} {{bitcoin_balance}}
+          {{update.symbol.DISPLAY.BTC.USD.FROMSYMBOL}} {{update.bitcoin_balance}}
         </td>
         <td class="h1 text-center" rowspan="2">
-            ${{usd_balance}}
+            ${{update.usd_balance}}
         </td>
       </tr>
       <tr>
         <td class='h4 text-right'>
-          ${{user_btc_balance}}*
+          ${{update.user_btc_balance}}*
       </td>
       </tr>
     </tbody>
@@ -71,13 +71,13 @@
         </tr>
       </thead>
       <tbody class="text-left">
-        {% for key,value in symbol.DISPLAY.items %}
         <tr>
-          <td class="h2 text-center">{{value.USD.PRICE}}*</td>
+          <td class="h2 text-center">${{update.bitcoin_price}}*</td>
+          {% for key,value in update.symbol.DISPLAY.items %}
           <td>{{value.USD.HIGHDAY}}</td>
           <td>{{value.USD.LOWDAY}}</td>
+          {% endfor %}
         </tr>
-        {% endfor %}
       </tbody>
     </table>
   </div>
@@ -123,8 +123,10 @@
 
 
   <!-- Error -->
-  <div class="h5" style="text-decoration: red;">
-    {{error}}
+  <div>
+    <h5 style="color:red;">
+      {{error}}
+    </h5>
   </div>
 
   
@@ -133,17 +135,17 @@
   <table class="table table-sm">
     <thead class="text-right">
       <tr>
-        <th scope="col" class="text-left">BTC ({{btc_percentage}}%) </th>
-        <th scope="col">USD ({{usd_percentage}}%)</th>
+        <th scope="col" class="text-left">BTC ({{update.btc_percentage}}%) </th>
+        <th scope="col">USD ({{update.usd_percentage}}%)</th>
       </tr>
     </thead>
     <tbody class="text-center">
       <tr>
         <td class='h4 text-center'>
-          {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}} {{bitcoin_balance}}
+          {{update.symbol.DISPLAY.BTC.USD.FROMSYMBOL}} {{update.bitcoin_balance}}
         </td>
         <td class="text-center h4">
-            ${{usd_balance}}
+            ${{update.usd_balance}}
         </td>
       </tr>
     </tbody>
@@ -163,7 +165,7 @@
           <th scope="col">Total</th>
         </tr>
       </thead>
-      {% for transactions in transaction.all %}
+      {% for transactions in update.transaction.all %}
       <tbody>
         <tr>
           <td>
