@@ -6,14 +6,13 @@ from django.contrib.auth.models import User
 from app1.models import Account, Transactions
 import requests
 import json
-
 import pandas as pd
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
-
 from app1.dashapps.crypto_compare import get_btc, symbol, news, mc_symbol
+
 
 #### Registration/Login #####
 def register(response):
@@ -95,6 +94,7 @@ def DASHBOARD(request):
         else:
             error = 'Insufficient funds...\n  *** Sale Denied! ***'
 
+    # Prepare
     def update():
         # Calculate the USD value of the user's BTC
         user_btc_balance = round((bitcoin_balance * bitquote_price), 2)
@@ -123,10 +123,10 @@ def DASHBOARD(request):
                     'transaction': transaction,
                     'symbol': symbol}
         
-                    
         return update.x
 
-    return render(request, 'app1/pages/DASHBOARD.html', {'update': update, 'error': error})
+    return render(request, 'app1/pages/DASHBOARD.html', {'update': update, 
+                                                         'error': error})
                    
 
 def quotes(request):
@@ -140,12 +140,11 @@ def quotes(request):
         crypto_request = requests.get(
         'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + quote + '&tsyms=USD')
         crypto = json.loads(crypto_request.content)
-            # API request
     else:
         crypto = symbol
         error = '*** ERROR! ***'
 
-
+    # API request
     def get_daily_crypto(symbol):
         API_KEY = 'ALPHAVANTAGE_API_KEY'
         market = 'USD'
@@ -163,7 +162,7 @@ def quotes(request):
 
     # Display time series chart
     app = DjangoDash('crypto-chart2')
-    
+
     # Time series chart
     def get_crypto_daily_line_chart():
         df = get_daily_crypto(symbol)
@@ -182,7 +181,9 @@ def quotes(request):
     chart = dcc.Graph(figure=(get_crypto_daily_line_chart()))
     app.layout = html.Div(children=[html.Div(chart)])
 
-    return render(request, 'app1/pages/quotes.html', {'crypto': crypto, 'mc_symbol': mc_symbol, 'error': error})
+    return render(request, 'app1/pages/quotes.html', {'crypto': crypto, 
+                                                      'mc_symbol': mc_symbol,
+                                                      'error': error})
 
 
 def crypto_news(request):
