@@ -9,8 +9,11 @@
     {% include './components/DASHBOARD_navbar.html' %}
 {% endblock navbar %}
 
-<!-- Crypto Symbol Search -->
-{% block symbol_search %}
+<div class="container" style="background-color: white;">
+  
+  <!-- Crypto Symbol Search -->
+{% block symbol_search2 %}
+<div>
 <table class="table table-striped table-bordered table-hover">
   <thead>
     <tr>
@@ -33,22 +36,28 @@
   {% endfor %}
   </tbody>
 </table>
-
-<div class="row" style="margin-top: 1rem;">
-  <div class="col">
-      <form class="form-inline" method="POST" action="{% url 'quotes' %}">
-          <div class="form-group mx-sm-3 mb-2">
-              {% csrf_token %}
-              <input type="search" class="form-control" placeholder="Enter symbols..." aria-label="Search" name="quote">
-          </div>
-          <button type="submit" class="btn btn-outline-secondary mb-2">Submit</button>
-      </form>
-  </div>
 </div>
-{% endblock symbol_search %}
+{% endblock symbol_search2 %}
 
+{{error}}
+<!-- User input -->
+{% block input %}
+  <div class="row">
+    <div class="col">
+        <form class="form-inline" method="POST" action="{% url 'quotes' %}" style='display:flex; justify-content:flex-end'>
+            <div class="form-group mx-sm-3 mb-2">
+                {% csrf_token %}
+                <input type="search" class="form-control" placeholder="Enter symbols..." aria-label="Search" name="quote">
+            </div>
+            <button type="submit" class="btn btn-outline-secondary mb-2">Submit</button>
+        </form>
+    </div>
+  </div>
+{% endblock input %}
+
+<!-- Time Series Chart -->
 {% block cryptotable %} 
-  {% plotly_direct name="crypto-chart2" %}
+{% plotly_direct name="crypto-chart2" %}
 {% endblock cryptotable %}
 
 <!-- Multi Symbol Table -->
@@ -74,6 +83,7 @@
   </tr>
 {% endfor %}
 {% endblock multi_symbol %}
+</div>
 
 {% else %}
 

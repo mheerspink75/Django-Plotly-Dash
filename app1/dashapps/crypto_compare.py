@@ -14,6 +14,42 @@ def symbol():
     symbol = json.loads(symbol_request.content)
     return symbol
 
+# Get News Feed
+def news():
+    news_request = requests.get(
+        'https://min-api.cryptocompare.com/data/v2/news/?lang=EN')
+    news = json.loads(news_request.content)
+    return news
+
+# Get Multiple Currency Full Data
+def mc_symbol():
+    multi_quote = 'BTC,ETH,BCH,ETC,XRP,BSV,EOS,LTC,TRX,OKB,BNB,DASH'
+    mc_request = requests.get(
+        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + multi_quote + '&tsyms=USD')
+    mc_symbol = json.loads(mc_request.content)
+    return mc_symbol
+
+# Get Time Series
+def get_daily_crypto(symbol):
+    quote = 'BTC'
+    API_KEY = 'ALPHAVANTAGE_API_KEY'
+    market = 'USD'
+    datatype = 'csv'  # ['json', 'csv']
+
+    ##### ALPHAVANTAGE API DIGITAL_CURRENCY_DAILY #####
+    daily = 'DIGITAL_CURRENCY_DAILY'
+    print('Currently pulling: ', quote, daily)
+    CRYPTO_DAILY_OHLC = ('https://www.alphavantage.co/query?') + ('function=' + daily) + \
+        ('&symbol=' + quote) + ('&market=' + market) + \
+        ('&apikey=' + API_KEY) + ('&datatype=' + datatype)
+
+    CRYPTO_DAILY_TIME_SERIES = pd.read_csv(CRYPTO_DAILY_OHLC)
+    return CRYPTO_DAILY_TIME_SERIES
+
+
+
+
+        
 '''
 def numbers():
     my_number = 4385893.38

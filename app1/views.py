@@ -7,9 +7,13 @@ from app1.models import Account, Transactions
 import requests
 import json
 
-from app1.dashapps.crypto_compare import get_btc, symbol
-from app1.dashapps import crypto_charts2
+import pandas as pd
+import dash_core_components as dcc
+import dash_html_components as html
+import plotly.graph_objs as go
+from django_plotly_dash import DjangoDash
 
+from app1.dashapps.crypto_compare import get_btc, symbol, news, mc_symbol
 
 #### Registration/Login #####
 def register(response):
@@ -35,7 +39,7 @@ def DASHBOARD(request):
     bitcoin_balance = float(request.user.account.bitcoin_balance)
 
     # Get BTC Price
-    bitcoin_price = float(get_btc())
+    bitquote_price = float(get_btc())
 
     # Error messages
     error = ''
@@ -53,7 +57,7 @@ def DASHBOARD(request):
             if BUY_SELL == 'SELL':
                 BUY_BTC = BUY_BTC * -1
             # USD Value of Sale
-            USD_SALE_PRICE = (BUY_BTC * bitcoin_price)
+            USD_SALE_PRICE = (BUY_BTC * bitquote_price)
             # Update BTC Balance Quantity
             UPDATE_BTC = round(BUY_BTC + bitcoin_balance, 2)
             # Update USD Balance
@@ -68,7 +72,7 @@ def DASHBOARD(request):
             # Update USD Balance
             UPDATE_USD = round(BUY_BTC + usd_balance, 2)
             # Calculate the BTC Quantity
-            BUY_BTC = round((USD_SALE_PRICE / bitcoin_price), 2)
+            BUY_BTC = round((USD_SALE_PRICE / bitquote_price), 2)
             # Update BTC Balance Quantity
             UPDATE_BTC = BUY_BTC + bitcoin_balance
 
@@ -81,7 +85,7 @@ def DASHBOARD(request):
         if x.usd_balance >= 0 and x.bitcoin_balance >= 0:
             # Create Transaction Table Entry
             Transactions.objects.create(user_id=request.user.id,
-                                        transaction_usd_price=bitcoin_price,
+                                        transaction_usd_price=bitquote_price,
                                         transaction_type=BUY_SELL,
                                         transaction_date=timezone.datetime.now(),
                                         transaction_btc_quantity=BUY_BTC,
@@ -93,7 +97,7 @@ def DASHBOARD(request):
 
     def update():
         # Calculate the USD value of the user's BTC
-        user_btc_balance = round((bitcoin_balance * bitcoin_price), 2)
+        user_btc_balance = round((bitcoin_balance * bitquote_price), 2)
         # Calculate the total portfolio balance in USD
         portfolio_balance = round(user_btc_balance + usd_balance, 2)
         # Calculate the percantage of the portfolio invested
@@ -104,12 +108,11 @@ def DASHBOARD(request):
             user=request.user).order_by('transaction_date').reverse()
 
         # Insert Commas into display items
-        btc_price = '{:,.2f}'.format(bitcoin_price)
+        btc_price = '{:,.2f}'.format(bitquote_price)
         user_usd_balance = '{:,.2f}'.format(usd_balance)
         user_btc_balance = '{:,.2f}'.format(user_btc_balance)
         portfolio_balance = '{:,.2f}'.format(portfolio_balance)
         
-
         update.x = {'user_usd_balance': user_usd_balance,
                     'bitcoin_balance': bitcoin_balance,
                     'btc_price': btc_price,
@@ -125,33 +128,62 @@ def DASHBOARD(request):
 
     return render(request, 'app1/pages/DASHBOARD.html', {'update': update, 'error': error})
                    
-                   
-                   
-
 
 def quotes(request):
-    # Get Quotes
+    quote = 'BTC'
+    error = ''
+
+    # Get quote from user input
     if request.method == 'POST':
         quote = request.POST['quote']
         quote = quote.upper()
         crypto_request = requests.get(
-            'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + quote + '&tsyms=USD')
+        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + quote + '&tsyms=USD')
         crypto = json.loads(crypto_request.content)
+            # API request
     else:
         crypto = symbol
+        error = '*** ERROR! ***'
 
-    # Get Multiple Currency Full Data
-    multi_coin = 'BTC,ETH,BCH,ETC,XRP,BSV,EOS,LTC,TRX,OKB,BNB,DASH'
-    mc_request = requests.get(
-        'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + multi_coin + '&tsyms=USD')
-    mc_symbol = json.loads(mc_request.content)
 
-    return render(request, 'app1/pages/quotes.html', {'crypto': crypto, 'mc_symbol': mc_symbol})
+    def get_daily_crypto(symbol):
+        API_KEY = 'ALPHAVANTAGE_API_KEY'
+        market = 'USD'
+        datatype = 'csv'  # ['json', 'csv']
+
+        ##### ALPHAVANTAGE API DIGITAL_CURRENCY_DAILY #####
+        daily = 'DIGITAL_CURRENCY_DAILY'
+        print('Currently pulling: ', quote, daily)
+        CRYPTO_DAILY_OHLC = ('https://www.alphavantage.co/query?') + ('function=' + daily) + \
+            ('&symbol=' + quote) + ('&market=' + market) + \
+            ('&apikey=' + API_KEY) + ('&datatype=' + datatype)
+
+        CRYPTO_DAILY_TIME_SERIES = pd.read_csv(CRYPTO_DAILY_OHLC)
+        return CRYPTO_DAILY_TIME_SERIES
+
+    # Display time series chart
+    app = DjangoDash('crypto-chart2')
+    
+    # Time series chart
+    def get_crypto_daily_line_chart():
+        df = get_daily_crypto(symbol)
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=df.timestamp, y=df['high (USD)'], name=quote + " High",
+                                line_color='deepskyblue'))
+        fig.add_trace(go.Scatter(x=df.timestamp, y=df['low (USD)'], name=quote + " Low",
+                                line_color='dimgray'))
+        fig.update_layout(title_text=quote,
+                        xaxis_rangeslider_visible=True,
+                        xaxis_title='Date',
+                        yaxis_title='Price (USD)',
+                        xaxis_range=['2019-07-01', timezone.datetime.now()],)
+        return fig
+
+    chart = dcc.Graph(figure=(get_crypto_daily_line_chart()))
+    app.layout = html.Div(children=[html.Div(chart)])
+
+    return render(request, 'app1/pages/quotes.html', {'crypto': crypto, 'mc_symbol': mc_symbol, 'error': error})
 
 
 def crypto_news(request):
-    # Get News Feed
-    news_request = requests.get(
-        'https://min-api.cryptocompare.com/data/v2/news/?lang=EN')
-    news = json.loads(news_request.content)
     return render(request, 'app1/pages/crypto_news.html', {'news': news})
