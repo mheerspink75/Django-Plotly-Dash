@@ -12,9 +12,9 @@
 <div class="container" style="background-color: white;">
   
   <!-- Crypto Symbol Search -->
-{% block symbol_search2 %}
-<div>
-<table class="table table-striped table-bordered table-hover">
+{% block symbol_search %}
+<div class="table-responsive-sm">
+<table class="table table-sm">
   <thead>
     <tr>
       <th scope="col">Currency</th>
@@ -27,8 +27,8 @@
   <tbody>
   {% for key,value in crypto.DISPLAY.items %}
     <tr>
-      <td>{{key}}</td>
-      <td>{{value.USD.PRICE}}</td>
+      <td class="font-weight-bold">{{key}}</td>
+      <td class="font-weight-bold">{{value.USD.PRICE}}</td>
       <td>{{value.USD.HIGHDAY}}</td>
       <td>{{value.USD.LOWDAY}}</td>
       <td>{{value.USD.MKTCAP}}</td>
@@ -37,22 +37,47 @@
   </tbody>
 </table>
 </div>
-{% endblock symbol_search2 %}
+{% endblock symbol_search %}
 
 {{error}}
 <!-- User input -->
 {% block input %}
   <div class="row">
     <div class="col">
-        <form class="form-inline" method="POST" action="{% url 'quotes' %}" style='display:flex; justify-content:flex-end'>
-            <div class="form-group mx-sm-3 mb-2">
-                {% csrf_token %}
-                <input type="search" class="form-control" placeholder="Enter symbols..." aria-label="Search" name="quote">
+        <form class="form-inline" 
+        method="POST" 
+        action="{% url 'quotes' %}" 
+        style='display:flex; justify-content:flex-start'
+        >
+        <div class="form-group mx-sm-3 mb-2"></div>
+            {% csrf_token %}
+              <div class="input-group input-group-sm">
+                <select 
+                class="custom-select form-control" 
+                id="inputGroupSelect" 
+                name="quote"                
+                >
+                  <option selected>Choose Currency...</option>
+                  <option value="BTC">BTC</option>
+                  <option value="ETH">ETH</option>
+                  <option value="BCH">BCH</option>
+                  <option value="ETC">ETC</option>
+                  <option value="XRP">XRP</option>
+                  <option value="BSV">BSV</option>
+                  <option value="EOS">EOS</option>
+                  <option value="LTC">LTC</option>
+                  <option value="TRX">TRX</option>
+                  <option value="OKB">OKB</option>
+                  <option value="BNB">BNB</option>
+                  <option value="DASH">DASH</option>
+                </select>
+                <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Submit</button>
+              </div>
             </div>
-            <button type="submit" class="btn btn-outline-secondary mb-2">Submit</button>
+          </div>
         </form>
-    </div>
-  </div>
+     </div>
 {% endblock input %}
 
 <!-- Time Series Chart -->
@@ -62,7 +87,8 @@
 
 <!-- Multi Symbol Table -->
 {% block multi_symbol %}
-<table class="table table-striped table-bordered table-hover">
+<div class="table-responsive-sm">
+<table class="table table-striped table-hover table-sm">
 <thead>
   <tr>
     <th scope="col">Currency</th>
@@ -82,7 +108,11 @@
     <td>{{value.USD.MKTCAP}}</td>
   </tr>
 {% endfor %}
+</tbody>
+</table>
+</div>
 {% endblock multi_symbol %}
+
 </div>
 
 {% else %}

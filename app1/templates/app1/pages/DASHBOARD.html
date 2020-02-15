@@ -10,19 +10,19 @@
 {% include './components/DASHBOARD_navbar.html' %} 
 {% endblock navbar %}
 
-<div class="container" style="">
+<div class="container">
   <!-- Portfolio Table -->
   <div class="table-responsive-sm">
-  <table class="table table-sm">
-    <thead>
+  <table class="table table-bordered table-sm">
+    <thead class="thead-light">
       <tr>
         <th scope="col" class="h4">Portfolio Total</th>
       </tr>
     </thead>
     <tbody class="text-center">
       <tr>
-        <td class="h1">
-              ${{update.portfolio_balance}}
+        <td class="h1 table-light">
+          ${{update.portfolio_balance}}
         </td>
       </tr>
     </tbody>
@@ -32,18 +32,18 @@
 <!-- BTC/USD Table -->
 <div class="table-responsive-sm">
   <table class="table table-sm">
-    <thead class="text-center">
-      <tr>
+    <thead class="thead-light text-center">
+      <tr class="table-bordered">
         <th scope="col">BTC ({{update.btc_percentage}}%) </th>
         <th scope="col">USD ({{update.usd_percentage}}%)</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td class='h2 text-center'>
+        <td class='h2 text-center table-light table-bordered'>
           {{update.symbol.DISPLAY.BTC.USD.FROMSYMBOL}} {{update.bitcoin_balance}}
         </td>
-        <td class="h1 text-center" rowspan="2">
+        <td class="h1 text-center table-light table-bordered" rowspan="2">
             ${{update.user_usd_balance}}
         </td>
       </tr>
@@ -56,29 +56,29 @@
   </table>
   </div>
 
-  <!-- BTC API Table -->
-  <div class="table-responsive-sm">
-    <table class="table table-sm">
-      <thead>
-        <tr>
-          <th scope="col" class="h5"> BTC Price</th>
-          <th scope="col">24hr High</th>
-          <th scope="col">24hr Low</th>
-        </tr>
-      </thead>
-      <tbody class="text-left">
-        <tr>
-          <td class="h2 text-center">${{update.btc_price}}*</td>
-          {% for key,value in update.symbol.DISPLAY.items %}
-          <td>{{value.USD.HIGHDAY}}</td>
-          <td>{{value.USD.LOWDAY}}</td>
-          {% endfor %}
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <!-- BTC API Table -->
+    <div class="table-responsive-sm">
+      <table class="table table-sm">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col" class="h5 text-center"> BTC Price</th>
+            <th scope="col">24hr High</th>
+            <th scope="col">24hr Low</th>
+          </tr>
+        </thead>
+        <tbody class="text-left">
+          <tr>
+            <td class="h2 text-center table-light table-bordered">${{update.btc_price}}*</td>
+            {% for key,value in update.symbol.DISPLAY.items %}
+            <td>{{value.USD.HIGHDAY}}</td>
+            <td>{{value.USD.LOWDAY}}</td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <!-- BUY/SELL Interface -->
+    <!-- BUY/SELL Interface -->
   <div class="container">
     <form class="form-inline" method="POST" action="{% url 'dashboard' %}" style='display:flex; justify-content:center'>
       <div class="form-group mx-sm-3 mb-2">
@@ -118,26 +118,24 @@
     </form>
   </div>
 
-
   <!-- Error -->
   <div>
     <h5 style="color:red;">
       {{error}}
     </h5>
   </div>
-
-  
+    
   <!-- Portfolio Table -->
 <div class="table-responsive-sm">
   <table class="table table-sm">
-    <thead class="text-center">
+    <thead class="thead-light text-center">
       <tr>
         <th scope="col">BTC ({{update.btc_percentage}}%) </th>
         <th scope="col">USD ({{update.usd_percentage}}%)</th>
       </tr>
     </thead>
     <tbody class="text-center">
-      <tr>
+      <tr class="table-bordered">
         <td class='h4 text-center'>
           {{update.symbol.DISPLAY.BTC.USD.FROMSYMBOL}} {{update.bitcoin_balance}}
         </td>
@@ -152,8 +150,8 @@
   <!-- Transaction History Table (Foreign Key) -->
   <div class="container-sm">
   <div class="table-responsive-sm">
-    <table class="table table-sm">
-      <thead>
+    <table class="table table-hover table-sm">
+      <thead class="thead-light">
         <tr>
           <th scope="col">{{user}}</th>
           <th scope="col">BTC Price</th>

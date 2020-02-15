@@ -41,15 +41,11 @@ def get_daily_crypto(symbol):
 
 def get_crypto_daily_line_chart():
     df = get_daily_crypto(symbol)
-
     fig = go.Figure()
-
     fig.add_trace(go.Scatter(x=df.timestamp, y=df['high (USD)'], name="BTC High (USD)",
                              line_color='deepskyblue'))
-
     fig.add_trace(go.Scatter(x=df.timestamp, y=df['low (USD)'], name="BTC Low (USD)",
                              line_color='dimgray'))
-
     fig.update_layout(title_text=('BTC (USD)' + '  ' + '$' + str(get_btc_price())),
                       xaxis_rangeslider_visible=True,
                       xaxis_title='Date',
@@ -59,6 +55,4 @@ def get_crypto_daily_line_chart():
 
 
 chart = dcc.Graph(figure=(get_crypto_daily_line_chart()))
-
-
 app.layout = html.Div(children=[html.Div(chart)])

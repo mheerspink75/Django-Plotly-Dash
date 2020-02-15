@@ -30,16 +30,19 @@ py manage.py collectstatic
 ```
 **6.**  Migrate the Database
 ```
-py manage.py makemigrations
+py manage.py makemigrations app1
 py manage.py migrate
 ```
-**7.**  Run the dev server
+**7.** Create a user account and log in
+```
+py manage.py createsuperuser
+```
+**8.**  Run the dev server
 ```
 py manage.py runserver
 ```
 dev server address:  http://127.0.0.1:8000/
 
-**8.** Create a user account and log in
 ---
 
 **Name:  Matt Heerspink**  
