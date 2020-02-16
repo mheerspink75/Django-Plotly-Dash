@@ -3,16 +3,17 @@
 
 {% block content %}
 
+<!-- Dashboard Navbar -->
 {% block navbar %}
     {% include './components/DASHBOARD_navbar.html' %}
 {% endblock navbar %}
 
-
+<!-- Jumbotron -->
 {% block login_message %}
 <div class="jumbotron jumbotron-fluid">
     <div class="text-center">
-        <h1 class="display-2">MACH TRADE</h1>
-        <p class="lead">Please <a href="{% url 'login' %}">Login</a> to access the dashboard  |  Forgot <a href="{% url 'password_reset' %}">password</a></p>
+        <h1 class="display-3">MACH TRADE</h1>
+        <p class="lead">Please <a href="{% url 'login' %}">Login</a>  |  or <a href="{% url 'register' %}">Register</a>
     </div>
 </div>
 {% endblock login_message %}

@@ -4,30 +4,34 @@
 
 {% if user.is_authenticated %} 
 
+<!-- Dashboard Navbar -->
 {% block navbar %} 
 {% include './components/DASHBOARD_navbar.html' %}
 {% endblock navbar %}
 
-
+<!-- News -->
+{% block News %}
 <div class="container" style="margin-top: 1rem; ">
   <div class="row">
-    {% for news in news.Data %}
-        <div class="col" style="margin-bottom: 1rem;">
-                <div class="card" style="min-width: 15rem;">
-                <img src="{{news.imageurl}}" class="card-img-top" alt="{{news.source}}" />
-                <div class="card-body">
-                    <h5 class="card-title">{{news.title}}</h5>
-                    <p class="card-text"></p>
-                    <a href="{{news.url}}" target="balnk">Read More...</a>
-                </div>
-            </div>
+  {% for news in news.Data %}
+    <div class="col" style="margin-bottom: 1rem;">
+      <div class="card" style="min-width: 15rem;">
+        <img src="{{news.imageurl}}" class="card-img-top" alt="{{news.source}}" />
+          <div class="card-body">
+              <h5 class="card-title">{{news.title}}</h5>
+              <p class="card-text"></p>
+              <a href="{{news.url}}" target="balnk">Read More...</a>
+          </div>
         </div>
+      </div>
     {% endfor %}
   </div>
 </div>
+{% endblock News %}
 
 {% else %} 
 
+<!-- Login Message -->
 {% block login_message %}
 <div class="container">
   <p>

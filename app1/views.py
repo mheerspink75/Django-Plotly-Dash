@@ -55,23 +55,30 @@ def DASHBOARD(request):
         if inlineRadioOptions == 'TRADE_BTC':
             if BUY_SELL == 'SELL':
                 BUY_BTC = BUY_BTC * -1
+            # Set the BTC Quantity Threshold
+            BTC_QUANTITY_THRESHOLD = .01
             # USD Value of Sale
-            USD_SALE_PRICE = (BUY_BTC * bitcoin_price)
+            USD_SALE_PRICE = BUY_BTC * bitcoin_price
             # Update BTC Balance Quantity
-            UPDATE_BTC = round(BUY_BTC + bitcoin_balance, 2)
+            UPDATE_BTC = BUY_BTC + bitcoin_balance
             # Update USD Balance
-            UPDATE_USD = round(usd_balance - USD_SALE_PRICE, 2)
+            UPDATE_USD = usd_balance - USD_SALE_PRICE
 
         # Calculate USD Trade
         if inlineRadioOptions == 'TRADE_USD':
             if BUY_SELL == 'BUY':
                 BUY_BTC = BUY_BTC * -1
+                BTC_QUANTITY_THRESHOLD = ((BUY_BTC * -1) / bitcoin_price)
+            if BUY_SELL == 'SELL':
+                BTC_QUANTITY_THRESHOLD =  BUY_BTC / bitcoin_price
             # USD Value of sale
             USD_SALE_PRICE = BUY_BTC * -1
             # Update USD Balance
-            UPDATE_USD = round(BUY_BTC + usd_balance, 2)
+            UPDATE_USD = BUY_BTC + usd_balance
             # Calculate the BTC Quantity
-            BUY_BTC = round((USD_SALE_PRICE / bitcoin_price), 2)
+            BUY_BTC = USD_SALE_PRICE / bitcoin_price
+            # Set the BTC Quantity USD Threshold to .001
+            BTC_QUANTITY_THRESHOLD = BTC_QUANTITY_THRESHOLD
             # Update BTC Balance Quantity
             UPDATE_BTC = BUY_BTC + bitcoin_balance
 
@@ -81,7 +88,7 @@ def DASHBOARD(request):
         x.usd_balance = UPDATE_USD
 
         # Check for insufficient funds
-        if x.usd_balance >= 0 and x.bitcoin_balance >= 0:
+        if (x.usd_balance >= 0 and x.bitcoin_balance >= 0) and BTC_QUANTITY_THRESHOLD >= 0.01 :
             # Create Transaction Table Entry
             Transactions.objects.create(user_id=request.user.id,
                                         transaction_usd_price=bitcoin_price,
@@ -91,15 +98,17 @@ def DASHBOARD(request):
                                         transaction_total_usd_price=(USD_SALE_PRICE * -1))
             x.save()
             return redirect(DASHBOARD)
-        else:
-            error = 'Insufficient funds...\n  *** Sale Denied! ***'
+        else: 
+            error = 'Insufficient funds...  *** Sale Denied! ***'
+            if BTC_QUANTITY_THRESHOLD < 0.01:
+                error = 'BTC Value: < 0.01  *** Sale Denied! ***'
 
     # Prepare
     def update():
         # Calculate the USD value of the user's BTC
         user_btc_balance = round((bitcoin_balance * bitcoin_price), 2)
         # Calculate the total portfolio balance in USD
-        portfolio_balance = round(user_btc_balance + usd_balance, 2)
+        portfolio_balance = user_btc_balance + usd_balance
         # Calculate the percantage of the portfolio invested
         btc_percentage = round((user_btc_balance / portfolio_balance) * 100, 2)
         usd_percentage = round((usd_balance / portfolio_balance) * 100, 2)
@@ -131,7 +140,6 @@ def DASHBOARD(request):
 
 def quotes(request):
     quote = 'BTC'
-    error = ''
 
     # Get quote from user input
     if request.method == 'POST':
@@ -142,7 +150,6 @@ def quotes(request):
         crypto = json.loads(crypto_request.content)
     else:
         crypto = symbol
-        #error = '*** ERROR! ***'
 
     # API request
     def get_daily_crypto(symbol):
@@ -181,8 +188,7 @@ def quotes(request):
     app.layout = html.Div(children=[html.Div(chart)])
 
     return render(request, 'app1/pages/quotes.html', {'crypto': crypto, 
-                                                      'mc_symbol': mc_symbol,
-                                                      'error': error})
+                                                      'mc_symbol': mc_symbol})
 
 
 def crypto_news(request):

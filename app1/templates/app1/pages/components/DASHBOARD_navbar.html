@@ -65,8 +65,16 @@
             >Home <span class="sr-only">(current)</span></a
           >
         </li>
-          <a class="nav-link Login" href="{% url 'login' %}"
-          >Login/Register</a>
+        <li>
+          <a class="nav-link" href="{% url 'login' %}"
+          >Login</a>
+        </li>
+        <li>
+          <a class="nav-link" href="#">|</a>
+        </li>
+        <li>
+          <a class="nav-link" href="{% url 'register' %}"
+          >Register</a>
         </li>
       </ul>
       <span class="navbar-text">
