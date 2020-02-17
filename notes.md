@@ -169,13 +169,15 @@ Need to do:
 -------------------------
 1. build models and views to log transactions, The form needs to post transaction amounts, order type (buy/sell) and post transaction history to the database.
 
-2. Visiualize user portfolio history.
+2. Visiualize user portfolio daily balance history.
 
-3. Work on styling the site.
+3. Work on styling the site. 
 
-4. Add buy and sell user interface.
+4. Add buy and sell user interface. X
 
-5. Add chart update search results to symbol lookup.
+5. Add chart update search results to symbol lookup. X
+
+6. Add and account history page and account reset.
 
 https://www.geeksforgeeks.org/python-relational-fields-in-django-models/
 

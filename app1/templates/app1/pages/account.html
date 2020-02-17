@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% load plotly_dash %} 
+{% block content %}
+
+{% if user.is_authenticated %} 
+
+<!-- Dashboard Navbar -->
+{% block navbar %} 
+{% include './components/DASHBOARD_navbar.html' %}
+{% endblock navbar %}
+
+<div class="container container-sm">
+ <!-- Portfolio Table -->
+ <div class="row">
+   <div class="col">
+    <div class="table-responsive-sm">
+      <table class="table table-bordered table-sm">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" class="h4">Portfolio Total</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr>
+            <td class="h1 table-light">
+              ${{portfolio_balance}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+   </div>
+ </div>
+
+  <!-- Plotly.js Charts -->
+  <div class="container container-sm" style="background-color: white;">
+    <div class="row">
+      <div class="col">
+        <div id='barChart'><!-- Plotly chart will be drawn inside this DIV --></div>
+      </div>
+      <div class="col">
+        <div id='changeBar'><!-- Plotly chart will be drawn inside this DIV --></div>
+      </div>
+      <div class="col">
+        <div id='pieChart'><!-- Plotly chart will be drawn inside this DIV --></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- BTC/USD Table -->
+  <div class="table-responsive-sm">
+    <table class="table table-sm">
+      <thead class="thead-dark text-center">
+        <tr class="table-bordered">
+          <th scope="col">BTC ({{btc_percentage}}%) </th>
+          <th scope="col">USD ({{usd_percentage}}%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class='h2 text-center table-light table-bordered'>
+            {{symbol.DISPLAY.BTC.USD.FROMSYMBOL}} {{bitcoin_balance}}
+          </td>
+          <td class="h1 text-center table-light table-bordered" rowspan="2">
+              ${{user_usd_balance}}
+          </td>
+        </tr>
+        <tr>
+          <td class='h4 text-right'>
+            ${{user_btc_value}}*
+        </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <!-- Account Reset -->
+    <form method="POST" action="{% url 'account' %}"style="display: flex; justify-content: flex-end">
+        <div class="form-row align-items-center">
+            {% csrf_token %}
+            <div class="col-auto my-1">
+            <div class="custom-control custom-checkbox mr-sm-2">
+                <input type="hidden" name="checkbox" value="false" />
+                <input type="checkbox" name="checkbox" value="true" class="custom-control-input" id="customControlAutosizing">
+                <label class="custom-control-label" for="customControlAutosizing">Reset Account to Default</label>
+            </div>
+            </div>
+            <div class="col-auto my-1">
+            <button type="submit" class="btn btn-sm btn-outline-danger">Reset</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="container">
+      <p style="color: red;">
+        {{message}}
+      </p>
+    </div>
+
+  <!-- Transaction History Table (Foreign Key) -->
+  <div class="container-sm">
+    <div class="table-responsive-sm">
+      <table class="table table-hover table-sm">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">{{user}}</th>
+            <th scope="col">BTC Price</th>
+            <th scope="col">Trade</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        {% for transactions in transaction.all %}
+        <tbody>
+          <tr>
+            <td>
+              {{transactions.transaction_date}}
+            </td>
+            <td>
+              ${{transactions.transaction_usd_price}}
+            </td>
+            <td>
+              {{transactions.transaction_type}}
+            </td>
+            <td>
+              {{transactions.transaction_btc_quantity}}
+            </td>
+            <td>
+              ${{transactions.transaction_total_usd_price}}
+            </td>
+          </tr>
+        </tbody>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Plotly.js -->
+<script>
+  var data = [{
+      values: ['{{user_btc_balance}}', '{{usd_balance}}'],
+      labels: ['BTC', 'USD'],
+      textinfo: "label+percent",
+      insidetextorientation: "radial",
+      marker: {
+        colors: ['rgb(255,140,0)', 'rgb(70,130,180)']
+      },
+      type: 'pie'
+    }];
+    
+    Plotly.newPlot('pieChart', data);
+</script>
+<script>
+  var data = [
+  {
+    x: ['BTC', 'USD', 'Total'],
+    y: ['{{user_btc_balance}}', '{{usd_balance}}', '{{portfolio_balance}}'],
+    marker: {
+      color: ['rgb(255,140,0)', 'rgb(70,130,180)', 'rgb(0,128,0)'],
+      line: {
+        color: 'rgb(0,0,0)',
+        width: 2
+    }
+  },
+    type: 'bar'
+  }
+];
+
+  Plotly.newPlot('barChart', data);
+</script>
+<script>
+  var data = [
+  {
+    x: ['Portfolio Total Change',],
+    y: ['{{change}}'],
+    width: [.35],
+    marker: {
+      color: ['rgb(0,128,0)', 'rgb(0,0,0)'],
+      line: {
+        color: 'rgb(0,0,0)',
+        width: 2
+    }
+  },
+    type: 'bar'
+  }
+];
+var layout = {
+  title: "Total Change $ {{change}}",
+};
+  
+  Plotly.newPlot('changeBar', data, layout);
+</script>
+
+
+{% else %} 
+
+<!-- Login Message -->
+{% block login_message %}
+<div class="container">
+  <p>
+    Please <a href="{% url 'login' %}" class="">Login </a>to view this content
+  </p>
+</div>
+{% endblock login_message %} 
+
+{% endif %}
+
+{% endblock %}
+

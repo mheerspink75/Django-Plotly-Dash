@@ -40,8 +40,8 @@ def DASHBOARD(request):
     # Get BTC Price
     bitcoin_price = float(get_btc())
 
-    # Error messages
-    error = ''
+    # message messages
+    message = ''
 
     if request.method == "POST":
         # Radio Options Trade BTC / USD
@@ -99,9 +99,9 @@ def DASHBOARD(request):
             x.save()
             return redirect(DASHBOARD)
         else: 
-            error = 'Insufficient funds...  *** Sale Denied! ***'
+            message = 'Insufficient funds...  *** Sale Denied! ***'
             if BTC_QUANTITY_THRESHOLD < 0.01:
-                error = 'BTC Value: < 0.01  *** Sale Denied! ***'
+                message = 'BTC Value: < 0.01  *** Sale Denied! ***'
 
     # Prepare
     def update():
@@ -135,7 +135,7 @@ def DASHBOARD(request):
         return update.x
 
     return render(request, 'app1/pages/DASHBOARD.html', {'update': update, 
-                                                         'error': error})
+                                                         'message': message})
                    
 
 def quotes(request):
@@ -193,3 +193,77 @@ def quotes(request):
 
 def crypto_news(request):
     return render(request, 'app1/pages/crypto_news.html', {'news': news})
+
+
+def account(request):
+    # Get BTC Price
+    bitcoin_price = float(get_btc())
+    # Get user BTC and USD balance from db
+    usd_balance = float(request.user.account.usd_balance)
+    bitcoin_balance = float(request.user.account.bitcoin_balance)
+
+    message = '* Reset will delete the transactions history...'
+
+    if request.method == 'POST':
+        checkbox = request.POST['checkbox']
+        if checkbox == 'true':
+            # Update user account balances
+            UPDATE_BTC = 0
+            UPDATE_USD = 50000
+
+            # Update the Database
+            x = request.user.account
+            x.bitcoin_balance = UPDATE_BTC
+            x.usd_balance = UPDATE_USD
+            x.save()
+
+            # Delete user transaction history
+            y = Transactions.objects.all().filter(user=request.user)
+            y.delete()
+
+            # Create Transaction Table Entry
+            Transactions.objects.create(user_id=request.user.id,
+                                        transaction_usd_price=0,
+                                        transaction_type='RESET',
+                                        transaction_date=timezone.datetime.now(),
+                                        transaction_btc_quantity=0,
+                                        transaction_total_usd_price=0)
+            
+            return redirect(account)
+        else:
+            message = "Check the 'Reset Accout' checkbox to Reset account balances..."
+
+    # Calculate the USD value of the user's BTC
+    user_btc_balance = round((bitcoin_balance * bitcoin_price), 2)
+    # Calculate the total portfolio balance in USD
+    portfolio_balance = user_btc_balance + usd_balance
+    # Calculate the percantage of the portfolio invested
+    btc_percentage = round((user_btc_balance / portfolio_balance) * 100, 2)
+    usd_percentage = round((usd_balance / portfolio_balance) * 100, 2)
+    # Calculate the change
+    change = round(portfolio_balance + (50000 * -1),2)
+    print(change)
+    
+    # Display the transaction history of the logged in user
+    transaction = Transactions.objects.all().filter(
+        user=request.user).order_by('transaction_date').reverse()
+
+
+
+    # Insert Commas into display items
+    user_usd_balance = '{:,.2f}'.format(usd_balance)
+    user_btc_value = '{:,.2f}'.format(user_btc_balance)
+    portfolio_balance = '{:,.2f}'.format(portfolio_balance)
+
+    return render(request, 'app1/pages/account.html', {'symbol': symbol,
+                                                       'btc_percentage': btc_percentage, 
+                                                       'bitcoin_balance': bitcoin_balance, 
+                                                       'usd_percentage': usd_percentage,
+                                                       'usd_balance': usd_balance, 
+                                                       'user_usd_balance': user_usd_balance,
+                                                       'user_btc_balance': user_btc_balance,
+                                                       'user_btc_value': user_btc_value,
+                                                       'portfolio_balance': portfolio_balance,
+                                                       'change': change,
+                                                       'transaction': transaction,
+                                                       'message': message})

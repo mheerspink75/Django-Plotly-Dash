@@ -11,4 +11,5 @@ urlpatterns = [
   path('crypto_news/', views.crypto_news, name='crypto_news'),
   path('register/', views.register, name='register'),
   path('quotes/', views.quotes, name='quotes'),
+  path('account/', views.account, name='account'),
 ]
