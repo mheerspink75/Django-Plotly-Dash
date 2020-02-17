@@ -13,7 +13,7 @@
 
 ## Abstract:  
 
-Mach Trade is a cryptocurrency trading application that allows individual users to perform hypothetical trading of Bitcoin for USD.  Mach Trade uses external API requests from [Alphavantage](https://www.alphavantage.co/documentation/) and [Cryptocompare](https://min-api.cryptocompare.com/documentation) APIs to pull real-time data for Bitcoin USD exchange rates, daily Bitcoin performance history charts and news stories which may impact the price of Bitcoin. All user BUY/SELL transactions, for hypothetical BTC/USD, are logged to the Django database. Portfolio performance is tracked through a combination of database queries and API requests. Individual users are credited with $50,000 USD when a new user account is created. Portfolio balances and transaction histories can be reset from the Account page. 
+Mach Trade is a cryptocurrency trading application that allows individual users to perform hypothetical trading of Bitcoin for USD.  Mach Trade uses external API requests from [Alphavantage](https://www.alphavantage.co/documentation/) and [Cryptocompare](https://min-api.cryptocompare.com/documentation) APIs to pull real-time data for Bitcoin USD exchange rates, time series performance history data and news stories which may impact the price of Bitcoin. All user BUY/SELL transactions, for hypothetical BTC/USD, are logged to the Django database. Portfolio performance is tracked through a combination of database queries and API data. Individual users are credited with $50,000 USD when a new user account is created. Portfolio balances and transaction histories can be reset from the Account page. 
 
 ---
 
@@ -61,12 +61,15 @@ dev server address:  http://127.0.0.1:8000/
 ### User Stories:
 
 **1.** Cryptocurrency exchange rates are unpredicitable. I like the idea of making money trading Bitcoin but I don't have any experience trading Bitcoin. And, I don't want to lose money in the process. I want an application that allows me to perform hypothetical trades so I don't risk losing money while I'm getting started with cryptocurrency trading.
+
 -*Mark*
 
 **2.** I trade Bitcoin sometimes but I don't spend a lot of money on trading Bitcoin. I always wondered if I could make a million dollars trading Bitcoin. If I had $50,000 dollars to spend I would try to make a million on Bitcoin. I want an application that allows me to test my trading stratagies with out the risk of having to borrow the money.
+
 -*Sarah* 
 
-**3.** I'm a student. I don't have money to waist on Bitcoin right now.  I just want to know how to set up a Django 3 project, make finance API queries with python, display the data on some nice charts, get the database working and deploy the Django app that I'm working on. I might buy some Bitcoin someday. 
+**3.** I'm a student. I don't have money to waist on Bitcoin right now.  I just want to know how to set up a Django 3 project, make finance API queries with python, display the data on some nice charts, get the database working and deploy the Django app that I'm working on. I might buy some Bitcoin someday.
+ 
 -*Joe*  
 
 ---
