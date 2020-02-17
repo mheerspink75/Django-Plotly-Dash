@@ -1,7 +1,6 @@
 {% extends "base.html" %}
-{% load plotly_dash %} 
 {% block content %}
-
+{% load plotly_dash %} 
 {% if user.is_authenticated %} 
 
 <!-- Dashboard Navbar -->
@@ -139,6 +138,7 @@
 
 <!-- Plotly.js -->
 <script>
+  // PIE CHART
   var data = [{
       values: ['{{user_btc_balance}}', '{{usd_balance}}'],
       labels: ['BTC', 'USD'],
@@ -153,6 +153,7 @@
     Plotly.newPlot('pieChart', data);
 </script>
 <script>
+  // CURRENCY BAR CHART
   var data = [
   {
     x: ['BTC', 'USD', 'Total'],
@@ -171,6 +172,7 @@
   Plotly.newPlot('barChart', data);
 </script>
 <script>
+  // CHANGE BAR CHART
   var data = [
   {
     x: ['Portfolio Total Change',],

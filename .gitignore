@@ -134,3 +134,4 @@ app1/dashapps/API_KEYS.py
 superuser.txt
 django_project/*
 staticfiles/
+notes.md

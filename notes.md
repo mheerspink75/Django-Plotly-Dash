@@ -157,9 +157,9 @@ Need to do:
 
 3. The form needs to post to the database when transactions are completed. X
 
-4. The form needs to post transaction amounts, order type (buy/sell) and post transaction history to the database.
+4. The form needs to post transaction amounts, order type (buy/sell) and post transaction history to the database. X
 
-5. Need to calculate portfolio value from the database  X and visiualize the data with a chart.
+5. Need to calculate portfolio value from the database  X and visiualize the data with a chart. X
 
 6. Models needs a transaction class for buys and sells. X
 
@@ -167,17 +167,17 @@ Need to do:
 
 
 -------------------------
-1. build models and views to log transactions, The form needs to post transaction amounts, order type (buy/sell) and post transaction history to the database.
+1. build models and views to log transactions, The form needs to post transaction amounts, order type (buy/sell) and post transaction history to the database. X
 
-2. Visiualize user portfolio daily balance history.
+2. Visiualize user portfolio daily balance history. X
 
-3. Work on styling the site. 
+3. Work on styling the site. X
 
 4. Add buy and sell user interface. X
 
 5. Add chart update search results to symbol lookup. X
 
-6. Add and account history page and account reset.
+6. Add and account history page and account reset. X
 
 https://www.geeksforgeeks.org/python-relational-fields-in-django-models/
 

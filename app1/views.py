@@ -248,8 +248,6 @@ def account(request):
     transaction = Transactions.objects.all().filter(
         user=request.user).order_by('transaction_date').reverse()
 
-
-
     # Insert Commas into display items
     user_usd_balance = '{:,.2f}'.format(usd_balance)
     user_btc_value = '{:,.2f}'.format(user_btc_balance)
