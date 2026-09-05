@@ -1,8 +1,5 @@
 # Project 4: Python Django - Bitcoin Trading Application
 
-*A full description of the project scope criteria can be found [here](https://sites.google.com/view/reference-page/project-4).*
-
-
 # Mach Trade
 
 **Mach Trade** is a Django-based cryptocurrency trading simulator that allows authenticated users to practice hypothetical Bitcoin trading against USD without risking real money.
