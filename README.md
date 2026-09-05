@@ -110,7 +110,7 @@ py manage.py collectstatic
 **6.**  Migrate the Database
 
 ```
-py manage.py makemigrations app1
+py manage.py makemigrations machtrade
 py manage.py migrate
 ```
 
