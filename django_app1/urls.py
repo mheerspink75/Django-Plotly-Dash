@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth.views import LoginView
+from app1.forms.forms import LoginForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app1.urls')),
+    path('login/', LoginView.as_view(authentication_form=LoginForm), name='login'),
     path('', include('django.contrib.auth.urls')),
     path('django_plotly_dash/', include('django_plotly_dash.urls')),
 ]

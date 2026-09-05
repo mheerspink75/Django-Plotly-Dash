@@ -1,11 +1,9 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
-
 
 {% block content %}
 
 {% block navbar %}
-    {% include '../app1/pages/components/DASHBOARD_navbar.html' %}
+    {% include 'app1/pages/components/DASHBOARD_navbar.html' %}
 {% endblock navbar %}
 
 
@@ -14,7 +12,15 @@
     <img src="https://media.giphy.com/media/ORUfxy9ElFbPIi2K1K/giphy.gif" style="width: 10rem; height: auto;">
     <form method="post" class="form-group">
         {% csrf_token %}
-        {{form|crispy}}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% for error in field.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
         <button type="submit" class="btn btn-outline-dark">Login</button> |
         <a href="{% url 'register' %}">Register</a>
     </form>

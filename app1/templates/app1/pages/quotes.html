@@ -11,8 +11,18 @@
 {% endblock navbar %}
 
 <div class="container" style="background-color: white;">
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h1 class="h2 mb-1">Market quotes</h1>
+    <p class="text-muted mb-0">Review current prices and recent BTC performance.</p>
+  </div>
+  <span class="badge badge-light">Live data</span>
+</div>
+
 <!-- Crypto Symbol Search -->
 {% block symbol_search %}
+<h2 class="h5">Selected market</h2>
+{% if crypto.DISPLAY %}
 <div class="table-responsive-sm">
   <table class="table table-sm">
     <thead>
@@ -37,11 +47,19 @@
     </tbody>
   </table>
 </div>
+{% else %}
+<div class="alert alert-warning" role="alert">
+  The selected market quote is temporarily unavailable. Please try again shortly.
+</div>
+{% endif %}
 {% endblock symbol_search %}
 
-{{error}}
+{% if chart_error %}
+<div class="alert alert-warning" role="alert">{{chart_error}}</div>
+{% endif %}
 <!-- User input -->
 {% block input %}
+<h2 class="h5 mt-4">Choose a currency</h2>
 <div class="row">
   <div class="col">
       <form class="form-inline" 
@@ -55,13 +73,13 @@
             <select 
             class="custom-select form-control" 
             id="inputGroupSelect" 
-            name="quote"                
+            name="quote"
+            aria-label="Currency to quote"
             >
-              <option selected value="BTC">Choose Currency...</option>
-              <option value="BTC">BTC</option>
-              <option value="ETH">ETH</option>
-              <option value="DASH">DASH</option>
-              <option value="LTC">LTC</option>
+              <option selected value="BTC">Bitcoin (BTC)</option>
+              <option value="ETH">Ethereum (ETH)</option>
+              <option value="DASH">Dash (DASH)</option>
+              <option value="LTC">Litecoin (LTC)</option>
             </select>
             <div class="input-group-append">
               <button class="btn btn-outline-secondary" type="submit">Submit</button>
@@ -74,11 +92,15 @@
 
 <!-- Time Series Chart -->
 {% block cryptotable %} 
-{% plotly_direct name="crypto-chart2" %}
+<h2 class="h5 mt-4">BTC price history</h2>
+<p class="text-muted">Daily prices for the last 90 days.</p>
+{% plotly_direct name="crypto-quotes" %}
 {% endblock cryptotable %}
 
 <!-- Multi Symbol Table -->
 {% block multi_symbol %}
+{% if mc_symbol.DISPLAY %}
+<h2 class="h5 mt-4">Market snapshot</h2>
 <div class="table-responsive-sm">
   <table class="table table-striped table-hover table-sm">
     <thead>
@@ -103,6 +125,11 @@
     </tbody>
   </table>
 </div>
+{% else %}
+<div class="alert alert-light mt-4" role="status">
+  The multi-currency snapshot is temporarily unavailable.
+</div>
+{% endif %}
 {% endblock multi_symbol %}
 </div>
 

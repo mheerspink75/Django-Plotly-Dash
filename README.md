@@ -3,55 +3,72 @@
 *A full description of the project scope criteria can be found [here](https://sites.google.com/view/reference-page/project-4).*
 
 ---
-**Name:  Matt Heerspink**  
-**Contact: mheerspink75@gmail.com**  
-**Organization: Texas A&M University Kingsville**  
-**Program:  Full Stack Web Development Bootcamp**  
+
+**Name:  Matt Heerspink**
+**Contact: mheerspink75@gmail.com**
+**Organization: Texas A&M University Kingsville**
+**Program:  Full Stack Web Development Bootcamp**
 **Project:  Python Django Finance Application**
 
 ---
 
-## Abstract:  
+## Abstract:
 
-Mach Trade is a cryptocurrency trading application that allows individual users to perform hypothetical trading of Bitcoin for USD.  Mach Trade uses external API requests from [Alphavantage](https://www.alphavantage.co/documentation/) and [Cryptocompare](https://min-api.cryptocompare.com/documentation) APIs to pull real-time data for Bitcoin USD exchange rates, time series performance history data and news stories which may impact the price of Bitcoin. All user BUY/SELL transactions, for hypothetical BTC/USD, are logged to the Django database. Portfolio performance is tracked through a combination of database queries and API data. Individual users are credited with $50,000 USD when a new user account is created. Portfolio balances and transaction histories can be reset from the Account page. 
+Mach Trade is a cryptocurrency trading application that allows individual users to perform hypothetical trading of Bitcoin for USD.  Mach Trade uses external API requests from [Alphavantage](https://www.alphavantage.co/documentation/) and [Cryptocompare](https://min-api.cryptocompare.com/documentation) APIs to pull real-time data for Bitcoin USD exchange rates, time series performance history data and news stories which may impact the price of Bitcoin. All user BUY/SELL transactions, for hypothetical BTC/USD, are logged to the Django database. Portfolio performance is tracked through a combination of database queries and API data. Individual users are credited with $50,000 USD when a new user account is created. Portfolio balances and transaction histories can be reset from the Account page.
 
 ---
 
 **Install instructions**
 
 **1.**  Clone the repoistory
+
 ```
 git clone https://github.com/mheerspink75/Django-Plotly-Dash.git
 ```
+
 **2.** Create a virtual environment in the cloned project directory
+
 ```
 virtualenv django_project
 ```
+
 **3.**  Activate the virtual environment
+
 ```
 source django_project/scripts/activate
 ```
+
 **4.**  Install the dependencies from requirements.txt
+
 ```
 pip install -r requirements.txt
 ```
+
 **5.**  Collect the static files
+
 ```
 py manage.py collectstatic
 ```
+
 **6.**  Migrate the Database
+
 ```
 py manage.py makemigrations app1
 py manage.py migrate
 ```
+
 **7.** Create a user account and log in
+
 ```
 py manage.py createsuperuser
 ```
+
 **8.** Run the dev server
+
 ```
 py manage.py runserver
 ```
+
 dev server address:  http://127.0.0.1:8000/
 
 ---
@@ -66,11 +83,11 @@ dev server address:  http://127.0.0.1:8000/
 
 **2.** I trade Bitcoin sometimes but I don't spend a lot of money on trading Bitcoin. I always wondered if I could make a million dollars trading Bitcoin. If I had $50,000 dollars to spend I would try to make a million on Bitcoin. I want an application that allows me to test my trading stratagies with out the risk of having to borrow the money.
 
--*Sarah* 
+-*Sarah*
 
 **3.** I'm a student. I don't have money to waist on Bitcoin right now.  I just want to know how to set up a Django 3 project, make finance API queries with python, display the data on some nice charts, get the database working and deploy the Django app that I'm working on. I might buy some Bitcoin someday.
- 
--*Joe*  
+
+-*Joe*
 
 ---
 
@@ -98,7 +115,7 @@ dev server address:  http://127.0.0.1:8000/
 
 **11.** Created an Account model that credits the user $50,000 USD when the new user logs in for the first time and updates the Bitcoin and USD balances for the authenticated user when trades are placed from the user's account.
 
-**12.** Created a Transactions model that logs the transacitions history of the authenticated user when trades are placed.  
+**12.** Created a Transactions model that logs the transacitions history of the authenticated user when trades are placed.
 
 **13.** Added a Reset button to allow the authenticated user to reset their Account balances and Transactions histories to their defaults.
 
@@ -109,4 +126,3 @@ dev server address:  http://127.0.0.1:8000/
 **16.** Created a Quote interface that allows the user to track daily crypto currency prices and displays a time series chart.
 
 **17.** Created a News page that pulls recent news stories from an API request.
-

@@ -16,11 +16,15 @@
   {% for news in news.Data %}
     <div class="col" style="margin-bottom: 1rem;">
       <div class="card" style="min-width: 15rem;">
-        <img src="{{news.imageurl}}" class="card-img-top" alt="{{news.source}}" />
+        {% if news.imageurl %}
+          <img src="{{news.imageurl}}" class="card-img-top" alt="{{news.source}}" />
+        {% else %}
+          <div class="card-img-top bg-light text-muted text-center p-4">Crypto news</div>
+        {% endif %}
           <div class="card-body">
               <h5 class="card-title">{{news.title}}</h5>
               <p class="card-text"></p>
-              <a href="{{news.url}}" target="balnk">Read More...</a>
+              <a href="{{news.url}}" target="_blank">Read More...</a>
           </div>
         </div>
       </div>
