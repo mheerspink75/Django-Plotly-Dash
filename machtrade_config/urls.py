@@ -1,4 +1,4 @@
-"""django_app1 URL Configuration
+"""Mach Trade URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -16,11 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.views import LoginView
-from app1.forms.forms import LoginForm
+from machtrade.forms.forms import LoginForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('app1.urls')),
+    path('', include('machtrade.urls')),
     path('login/', LoginView.as_view(authentication_form=LoginForm), name='login'),
     path('', include('django.contrib.auth.urls')),
     path('django_plotly_dash/', include('django_plotly_dash.urls')),

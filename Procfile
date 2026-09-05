@@ -1,1 +1,1 @@
-web: gunicorn django_app1.wsgi --log-file -
+web: gunicorn machtrade_config.wsgi --log-file -

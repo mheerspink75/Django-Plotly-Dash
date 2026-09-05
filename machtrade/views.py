@@ -3,14 +3,14 @@ from .forms.forms import RegisterForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib.auth.models import User
-from app1.models import Account, Transactions
+from machtrade.models import Account, Transactions
 import requests
 import json
 import pandas as pd
 from dash import dcc, html
 import plotly.graph_objs as go
 from django_plotly_dash import DjangoDash
-from app1.dashapps.crypto_compare import get_btc, symbol, news, mc_symbol
+from machtrade.dashapps.crypto_compare import get_btc, symbol, news, mc_symbol
 
 
 quotes_dash_app = DjangoDash('crypto-quotes')
@@ -30,7 +30,7 @@ def register(response):
 
 #### Main Pages ####
 def home(request):
-    return render(request, 'app1/pages/index.html')
+    return render(request, 'machtrade/pages/index.html')
 
 
 @login_required
@@ -169,7 +169,7 @@ def DASHBOARD(request):
         
         return update.x
 
-    return render(request, 'app1/pages/DASHBOARD.html', {'update': update, 
+    return render(request, 'machtrade/pages/DASHBOARD.html', {'update': update,
                                                          'message': message})
                    
 
@@ -250,14 +250,14 @@ def quotes(request):
             children=[html.Div(chart_error, className='alert alert-warning')]
         )
 
-    return render(request, 'app1/pages/quotes.html', {'crypto': crypto, 
+    return render(request, 'machtrade/pages/quotes.html', {'crypto': crypto,
                                                       'mc_symbol': multi_market_data,
                                                       'chart_error': chart_error})
 
 
 def crypto_news(request):
     news_data = news()
-    return render(request, 'app1/pages/crypto_news.html', {'news': news_data})
+    return render(request, 'machtrade/pages/crypto_news.html', {'news': news_data})
 
 
 def account(request):
@@ -342,7 +342,7 @@ def account(request):
     user_btc_value = '{:,.2f}'.format(user_btc_balance)
     portfolio_balance = '{:,.2f}'.format(portfolio_balance)
 
-    return render(request, 'app1/pages/account.html', {'symbol': market_data,
+    return render(request, 'machtrade/pages/account.html', {'symbol': market_data,
                                                        'btc_percentage': btc_percentage, 
                                                        'bitcoin_balance': bitcoin_balance, 
                                                        'usd_percentage': usd_percentage,

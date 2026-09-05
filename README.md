@@ -89,13 +89,13 @@ git clone https://github.com/mheerspink75/Django-Plotly-Dash.git
 **2.** Create a virtual environment in the cloned project directory
 
 ```
-virtualenv django_project
+python -m venv .venv
 ```
 
 **3.**  Activate the virtual environment
 
 ```
-source django_project/scripts/activate
+source .venv/Scripts/activate
 ```
 
 **4.**  Install the dependencies from requirements.txt

@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
 
-class App1Config(AppConfig):
-    name = 'app1'
+class MachtradeConfig(AppConfig):
+    name = 'machtrade'
+    label = 'app1'
